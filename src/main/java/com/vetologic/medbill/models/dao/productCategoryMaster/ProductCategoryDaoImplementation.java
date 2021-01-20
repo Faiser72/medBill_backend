@@ -8,7 +8,8 @@ import javax.persistence.EntityManager;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.stereotype.Repository;
+@Repository
 public class ProductCategoryDaoImplementation implements ProductCategoryDao{
 
 	@Autowired
@@ -71,5 +72,20 @@ public class ProductCategoryDaoImplementation implements ProductCategoryDao{
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	@Override
+	public List<?> getAllExceptOne(String beanClassName, int id) {
+		Session session = getSession();
+		List<?> listOfObjects = null;
+		try {
+			Query<?> query = session.createQuery("FROM " + beanClassName + " WHERE deletionFlag=?0 AND id NOT IN(?1)");
+			query.setParameter(0, 0);
+			query.setParameter(1, id);
+			listOfObjects = query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listOfObjects;
 	}
 }

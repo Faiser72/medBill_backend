@@ -37,4 +37,8 @@ public class ProductCategoryServiceImplementation implements ProductCategoryServ
 		return productCategoryDao.update(object);
 	}
 
+	@Override
+	public List<?> getAllExceptOne(String beanClassName, int id) {
+		return productCategoryDao.getAllExceptOne(beanClassName, id);
+	}
 }

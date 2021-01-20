@@ -33,7 +33,7 @@ public class ProductMasterBean extends AbstractCreatedAndUpdated {
 	
 	@ManyToOne
 	@JoinColumn(name = "PROD_CAT_ID")
-	private ProductCategoryMasterBean productCategoryName;
+	private ProductCategoryMasterBean productCategory;
 	
 	@ManyToOne
 	@JoinColumn(name = "PROD_MGFR_ID")

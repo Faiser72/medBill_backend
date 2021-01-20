@@ -11,4 +11,6 @@ public interface ProductCategoryService {
 	Object getById(String beanClassName, int id);
 	
 	boolean update(Object object);
+	
+	List<?> getAllExceptOne(String beanClassName, int id);
 }

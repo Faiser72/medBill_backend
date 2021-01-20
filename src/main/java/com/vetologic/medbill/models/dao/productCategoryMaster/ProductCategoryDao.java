@@ -10,4 +10,6 @@ public interface ProductCategoryDao {
 	Object getById(String beanClassName, int id);
 
 	boolean update(Object object);
+	 
+	List<?> getAllExceptOne(String beanClassName, int id);
 }
