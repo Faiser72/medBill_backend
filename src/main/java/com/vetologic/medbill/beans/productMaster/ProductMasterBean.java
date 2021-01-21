@@ -37,7 +37,7 @@ public class ProductMasterBean extends AbstractCreatedAndUpdated {
 	
 	@ManyToOne
 	@JoinColumn(name = "PROD_MGFR_ID")
-	private ManufacturerMasterBean productManufacturerName;
+	private ManufacturerMasterBean manufacturer;
 	
 	@Column(name = "PROD_HSN_CODE")
 	private String hsnCode;
