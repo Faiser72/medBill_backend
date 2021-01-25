@@ -33,4 +33,9 @@ public class OrderServiceImplementation implements OrderService{
 	public List<?> getAll(String beanClassName) {
 		return orderDao.getAll(beanClassName);
 	}
+	
+	@Override
+	public List<?> getOrderListByOederId(String beanClassName, int id) {
+		return orderDao.getOrderListByOederId(beanClassName, id);
+	}
 }

@@ -12,4 +12,6 @@ public interface OrderService {
 	
 	List<?> getAll(String beanClassName);
 
+	List<?> getOrderListByOederId(String beanClassName, int id);
+
 }

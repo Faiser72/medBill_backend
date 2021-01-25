@@ -111,4 +111,21 @@ private static Logger log = LoggerFactory.getLogger(ProductCategoryMasterControl
 		}
 		return medbillResponse;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@GetMapping(path = "/orderListByOrderId/{orderId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public MedbillResponse orderListByOrderId(@PathVariable int orderId, MedbillResponse medbillResponse) {
+		List<OrderItemBean> orderItemList = (List<OrderItemBean>) orderService
+				.getOrderListByOederId("OrderItemBean",orderId);
+		if (orderItemList.size() > 0) {
+			System.out.println("orderItemList" + orderItemList);
+			medbillResponse.setListObject(orderItemList);
+			medbillResponse.setSuccess(true);
+		} else {
+			medbillResponse.setSuccess(false);
+			medbillResponse.setMessage("orderItemList  is Empty");
+			log.info("orderItemList is Empty");
+		}
+		return medbillResponse;
+	}
 }

@@ -11,6 +11,9 @@ public interface OrderDao {
 	int save(Object object);
 	
 	List<?> getAll(String beanClassName);
+	
+	List<?> getOrderListByOederId(String beanClassName, int id);
+
 
 
 

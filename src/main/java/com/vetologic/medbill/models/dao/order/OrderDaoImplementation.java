@@ -74,4 +74,19 @@ public class OrderDaoImplementation implements OrderDao{
 		}
 		return listOfObjects;
 	}
+	
+	@Override
+	public List<?> getOrderListByOederId(String beanClassName, int id) {
+		Session session = getSession();
+		List<?> listOfObjects = null;
+		try {
+			Query<?> query = session.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND orderId.orderId = ?1");
+			query.setParameter(0, 0);
+			query.setParameter(1, id);
+			listOfObjects = query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listOfObjects;
+	}
 }
