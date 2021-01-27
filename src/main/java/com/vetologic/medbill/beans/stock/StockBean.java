@@ -1,5 +1,6 @@
 package com.vetologic.medbill.beans.stock;
 
+
 import java.util.List;
 
 import javax.persistence.Column;
@@ -21,7 +22,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @EqualsAndHashCode(callSuper = false)
-@Table(name = "CREATE_STOCK")
+@Table(name = "STOCK")
 public class StockBean extends AbstractCreatedAndUpdated{
 	
 	@Id
@@ -30,10 +31,10 @@ public class StockBean extends AbstractCreatedAndUpdated{
 	private int stockId;
 
 	@ManyToOne
-	@JoinColumn(name = "ORD_ID")
-	private OrderBean orderId;
+	@JoinColumn(name = "ORD_NUM")
+	private OrderBean orderNumber;
 
-	@Column(name = "STOCK_RECEIVED _DATE")
+	@Column(name = "STOCK_RECEIVED_DATE")
 	private String receivedDate;
 
 	@Column(name = "STOCK_SUPPLIER_INV_NUM")
@@ -55,6 +56,6 @@ public class StockBean extends AbstractCreatedAndUpdated{
 	private String purchaseEntryTotal;
 
 	@Transient
-	List<StockItemBean> stockList;
+	private List<StockItemBean> stockList;
 
 }

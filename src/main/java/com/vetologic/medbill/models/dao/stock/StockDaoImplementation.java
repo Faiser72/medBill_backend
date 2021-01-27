@@ -1,19 +1,18 @@
-package com.vetologic.medbill.models.dao.purchaseEntry;
+package com.vetologic.medbill.models.dao.stock;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.vetologic.medbill.beans.purchaseEntry.PurchaseEntryBean;
+import com.vetologic.medbill.beans.stock.StockBean;
+
 
 @Repository
-public class PurchaseEntryDaoImplementation implements PurchaseEntryDao{
+public class StockDaoImplementation implements StockDao{
 
 	@Autowired
 	private EntityManager entityManager;
@@ -22,7 +21,6 @@ public class PurchaseEntryDaoImplementation implements PurchaseEntryDao{
 		return entityManager.unwrap(Session.class);
 	}
 	
-
 	@Override
 	public int save(Object object) {
 		Serializable serializable = 0;
@@ -36,29 +34,14 @@ public class PurchaseEntryDaoImplementation implements PurchaseEntryDao{
 	}
 	
 	@Override
-	public boolean deletePurchaseEntry(PurchaseEntryBean purchase) {
+	public boolean deleteStock(StockBean stock) {
 		Session session = getSession();
 		try {
-			session.delete(purchase);
+			session.delete(stock);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
 	}
-
-	@Override
-	public List<?> getAll(String beanClassName) {
-		Session session = getSession();
-		List<?> listOfObjects = null;
-		try {
-			Query<?> query = session.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0");
-			query.setParameter(0, 0);
-			listOfObjects = query.getResultList();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return listOfObjects;
-	}
-	
 }

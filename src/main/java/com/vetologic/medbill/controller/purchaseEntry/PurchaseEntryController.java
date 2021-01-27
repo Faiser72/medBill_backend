@@ -17,6 +17,7 @@ import com.vetologic.medbill.beans.stock.StockBean;
 import com.vetologic.medbill.beans.stock.StockItemBean;
 import com.vetologic.medbill.controller.productCategoryMaster.ProductCategoryMasterController;
 import com.vetologic.medbill.models.service.purchaseEntry.PurchaseEntryService;
+import com.vetologic.medbill.models.service.stock.StockService;
 import com.vetologic.medbill.utils.AppUtil;
 
 @RestController
@@ -24,53 +25,78 @@ import com.vetologic.medbill.utils.AppUtil;
 @RequestMapping("purchaseEntry")
 public class PurchaseEntryController {
 
-private static Logger log = LoggerFactory.getLogger(ProductCategoryMasterController.class);
-	
+	private static Logger log = LoggerFactory.getLogger(ProductCategoryMasterController.class);
+
 	@Autowired
 	private PurchaseEntryService purchaseEntryService;
-	
-//	@PostMapping(path = "/addPurchaseEntry", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//	public MedbillResponse addPurchaseEntry(@RequestBody PurchaseEntryBean purchaseEntryBean, StockBean stockBean, MedbillResponse medbillResponse) {
-//		purchaseEntryBean.setDeletionFlag(0);
-//		purchaseEntryBean.setCreatedDate(AppUtil.currentDateWithTime());
-//		int id = purchaseEntryService.save(purchaseEntryBean);
-//		if (id != 0) {
-//			purchaseEntryBean.setPurchaseEntryId(id);
-//			for (PurchaseEntryItemBean purchaseItems : purchaseEntryBean.getPurchaseEntryList()) {
-//				purchaseItems.setCreatedDate(AppUtil.currentDateWithTime());
-//				purchaseItems.setPurchaseEntryId(purchaseEntryBean);
-//				purchaseItems.setDeletionFlag(0);
-//				purchaseEntryService.save(purchaseItems);
-//			}
-//			medbillResponse.setSuccess(true);
-//			medbillResponse.setMessage("Saved Sucessfully");
-//			log.info("Saved Sucessfully & Saved Purchase Id is: " + id);
-//			stockBean.setDeletionFlag(0);
-//			stockBean.setCreatedDate(AppUtil.currentDateWithTime());
-//			int stockId= purchaseEntryService.save(stockBean);
-//			
-//			if(stockId !=0) {
-//				stockBean.setStockId(id);
-//				for (StockItemBean stockItems : stockBean.getStockList()) {
-//					stockItems.setCreatedDate(AppUtil.currentDateWithTime());
-//					stockItems.setStockId(stockBean);
-//					stockItems.setDeletionFlag(0);
-//					purchaseEntryService.save(stockItems);
-//				}
-//				medbillResponse.setSuccess(true);
-//				medbillResponse.setMessage("Saved Sucessfully");
-//				log.info("Saved Sucessfully & Saved Purchase Id is: " + id);
-//			}
-//			else {
-//				medbillResponse.setSuccess(false);
-//				medbillResponse.setMessage("Saved purchaseEntry, failed to save stock");
-//				log.info("Saved purchaseEntry, failed to save stock");
-//			}
-//		} else {
-//			medbillResponse.setSuccess(false);
-//			medbillResponse.setMessage("Saved UnSucessfully");
-//			log.info("Saved UnSucessfully");
-//		}		
-//		return medbillResponse;
-//	}
+
+	@Autowired
+	private StockService stockService;
+
+	@PostMapping(path = "/addPurchaseEntry", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public MedbillResponse addPurchaseEntry(@RequestBody PurchaseEntryBean purchaseEntryBean, StockBean stockBean,
+			MedbillResponse medbillResponse) {
+		try {
+			purchaseEntryBean.setDeletionFlag(0);
+			purchaseEntryBean.setCreatedDate(AppUtil.currentDateWithTime());
+			int purchaseEntryId = purchaseEntryService.save(purchaseEntryBean);
+			System.err.println(purchaseEntryBean);
+			if (purchaseEntryId != 0) {
+				purchaseEntryBean.setPurchaseEntryId(purchaseEntryId);
+				for (PurchaseEntryItemBean purchaseItems : purchaseEntryBean.getPurchaseEntryList()) {
+					purchaseItems.setCreatedDate(AppUtil.currentDateWithTime());
+					purchaseItems.setPurchaseEntryId(purchaseEntryBean);
+					purchaseItems.setDeletionFlag(0);
+					purchaseEntryService.save(purchaseItems);
+				}
+				log.info("Saved Sucessfully & Saved Purchase Id is: " + purchaseEntryId);
+
+				stockBean.setDeletionFlag(0);
+				stockBean.setCreatedDate(AppUtil.currentDateWithTime());
+				stockBean.setOrderNumber(purchaseEntryBean.getOrderNumber());
+				stockBean.setPurchaseEntryDiscount(purchaseEntryBean.getPurchaseEntryDiscount());
+				stockBean.setPurchaseEntrySubTotal(purchaseEntryBean.getPurchaseEntrySubTotal());
+				stockBean.setPurchaseEntryTax(purchaseEntryBean.getPurchaseEntryTax());
+				stockBean.setPurchaseEntryTotal(purchaseEntryBean.getPurchaseEntryTotal());
+				stockBean.setReceivedDate(purchaseEntryBean.getReceivedDate());
+				stockBean.setStockList(purchaseEntryBean.getStockList());
+				stockBean.setSupplierInvoiceNumber(purchaseEntryBean.getSupplierInvoiceNumber());
+				int stockId = stockService.save(stockBean);
+				System.err.println(stockBean);
+				if (stockId != 0) {
+					for (StockItemBean stockItems : stockBean.getStockList()) {
+						stockItems.setCreatedDate(AppUtil.currentDateWithTime());
+						stockItems.setStockId(stockBean);
+						stockItems.setDeletionFlag(0);
+						purchaseEntryService.save(stockItems);
+					}
+					log.info("Saved Sucessfully & Saved Purchase Id is: " + stockId);
+				} else {
+					medbillResponse.setSuccess(false);
+					medbillResponse.setMessage("Saved UnSucessfully");
+					log.info("Saved UnSucessfully");
+					// purchase deletion logic here..!
+					if (purchaseEntryService.deletePurchaseEntry(purchaseEntryBean)) {
+						medbillResponse.setSuccess(false);
+						medbillResponse.setMessage("Saved UnSuccessfully!");
+						log.info("Saved UnSuccessfully for StockId is: " + stockId
+								+ " Due to failure of save Purchase details.");
+					}
+				}
+				medbillResponse.setSuccess(true);
+				medbillResponse.setMessage("Saved Sucessfully");
+			} else {
+				medbillResponse.setSuccess(false);
+				medbillResponse.setMessage("Saved UnSucessfully");
+				log.info("Saved UnSucessfully");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			medbillResponse.setSuccess(false);
+			medbillResponse.setMessage("Someting went wrong!");
+			log.info("Someting went wrong!");
+		}
+		return medbillResponse;
+	}
 }

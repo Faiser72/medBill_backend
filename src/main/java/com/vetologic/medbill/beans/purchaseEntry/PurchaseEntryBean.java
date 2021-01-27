@@ -1,5 +1,6 @@
 package com.vetologic.medbill.beans.purchaseEntry;
 
+
 import java.util.List;
 
 import javax.persistence.Column;
@@ -13,16 +14,16 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.vetologic.medbill.beans.order.OrderBean;
+import com.vetologic.medbill.beans.stock.StockItemBean;
 import com.vetologic.medbill.utils.AbstractCreatedAndUpdated;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-
-@Entity
-@Table(name = "CREATE_PURCHASE_ENTRY")
 @Data
 @EqualsAndHashCode(callSuper = false)
+@Entity
+@Table(name = "PURCHASE_ENTRY")
 public class PurchaseEntryBean extends AbstractCreatedAndUpdated {
 
 	@Id
@@ -31,10 +32,10 @@ public class PurchaseEntryBean extends AbstractCreatedAndUpdated {
 	private int purchaseEntryId;
 	
 	@ManyToOne
-	@JoinColumn(name = "ORD_ID")
-	private OrderBean orderId;
+	@JoinColumn(name = "ORD_NUM")
+	private OrderBean orderNumber;
 
-	@Column(name = "PUR_RECEIVED _DATE")
+	@Column(name = "PUR_RECEIVED_DATE")
 	private String receivedDate;
 
 	@Column(name = "PUR_SUPPLIER_INV_NUM")
@@ -54,7 +55,11 @@ public class PurchaseEntryBean extends AbstractCreatedAndUpdated {
 
 	@Column(name = "PUR_TOTAL_NET_AMT")
 	private String purchaseEntryTotal;
-
-	@Transient
-	List<PurchaseEntryItemBean> purchaseEntryList;
+	
+	 @Transient 
+	 private List<PurchaseEntryItemBean> purchaseEntryList;
+	 
+	 @Transient 
+	 private List<StockItemBean> stockList;
+	 
 }
