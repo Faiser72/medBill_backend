@@ -1,6 +1,5 @@
 package com.vetologic.medbill.beans.stock;
 
-
 import java.util.List;
 
 import javax.persistence.Column;
@@ -23,8 +22,8 @@ import lombok.EqualsAndHashCode;
 @Entity
 @EqualsAndHashCode(callSuper = false)
 @Table(name = "STOCK")
-public class StockBean extends AbstractCreatedAndUpdated{
-	
+public class StockBean extends AbstractCreatedAndUpdated {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "STOCK_ID")

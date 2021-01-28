@@ -1,10 +1,13 @@
 package com.vetologic.medbill.controller.purchaseEntry;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -96,6 +99,22 @@ public class PurchaseEntryController {
 			medbillResponse.setSuccess(false);
 			medbillResponse.setMessage("Someting went wrong!");
 			log.info("Someting went wrong!");
+		}
+		return medbillResponse;
+	}
+
+	@SuppressWarnings("unchecked")
+	@GetMapping(path = "/listPurchaseEntry", produces = MediaType.APPLICATION_JSON_VALUE)
+	public MedbillResponse listPurchaseEntry(MedbillResponse medbillResponse) {
+		List<PurchaseEntryBean> purchaseList = (List<PurchaseEntryBean>) purchaseEntryService
+				.getAll("PurchaseEntryBean");
+		if (purchaseList.size() > 0) {
+			medbillResponse.setListObject(purchaseList);
+			medbillResponse.setSuccess(true);
+		} else {
+			medbillResponse.setSuccess(false);
+			medbillResponse.setMessage("purchaseList  is Empty");
+			log.info("purchaseList  is Empty");
 		}
 		return medbillResponse;
 	}

@@ -6,11 +6,10 @@ import com.vetologic.medbill.beans.purchaseEntry.PurchaseEntryBean;
 
 public interface PurchaseEntryDao {
 
-
 	int save(Object object);
-	
+
 	List<?> getAll(String beanClassName);
-	
+
 	boolean deletePurchaseEntry(PurchaseEntryBean purchase);
 
 }

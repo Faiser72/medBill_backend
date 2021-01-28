@@ -1,6 +1,5 @@
 package com.vetologic.medbill.beans.purchaseEntry;
 
-
 import java.util.List;
 
 import javax.persistence.Column;
@@ -30,7 +29,7 @@ public class PurchaseEntryBean extends AbstractCreatedAndUpdated {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "PUR_ENTRY_ID")
 	private int purchaseEntryId;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "ORD_NUM")
 	private OrderBean orderNumber;
@@ -55,11 +54,11 @@ public class PurchaseEntryBean extends AbstractCreatedAndUpdated {
 
 	@Column(name = "PUR_TOTAL_NET_AMT")
 	private String purchaseEntryTotal;
-	
-	 @Transient 
-	 private List<PurchaseEntryItemBean> purchaseEntryList;
-	 
-	 @Transient 
-	 private List<StockItemBean> stockList;
-	 
+
+	@Transient
+	private List<PurchaseEntryItemBean> purchaseEntryList;
+
+	@Transient
+	private List<StockItemBean> stockList;
+
 }

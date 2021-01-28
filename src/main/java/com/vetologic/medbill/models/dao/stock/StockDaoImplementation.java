@@ -1,18 +1,19 @@
 package com.vetologic.medbill.models.dao.stock;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.vetologic.medbill.beans.stock.StockBean;
 
-
 @Repository
-public class StockDaoImplementation implements StockDao{
+public class StockDaoImplementation implements StockDao {
 
 	@Autowired
 	private EntityManager entityManager;
@@ -20,7 +21,7 @@ public class StockDaoImplementation implements StockDao{
 	private Session getSession() {
 		return entityManager.unwrap(Session.class);
 	}
-	
+
 	@Override
 	public int save(Object object) {
 		Serializable serializable = 0;
@@ -32,7 +33,7 @@ public class StockDaoImplementation implements StockDao{
 		}
 		return (int) serializable;
 	}
-	
+
 	@Override
 	public boolean deleteStock(StockBean stock) {
 		Session session = getSession();
@@ -43,5 +44,19 @@ public class StockDaoImplementation implements StockDao{
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	@Override
+	public List<?> getAll(String beanClassName) {
+		Session session = getSession();
+		List<?> listOfObjects = null;
+		try {
+			Query<?> query = session.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0");
+			query.setParameter(0, 0);
+			listOfObjects = query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listOfObjects;
 	}
 }

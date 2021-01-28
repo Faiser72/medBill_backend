@@ -9,8 +9,7 @@ public interface StockDao {
 	int save(Object object);
 
 	boolean deleteStock(StockBean stock);
-	
-//	List<?> getAll(String beanClassName);
 
+	List<?> getAll(String beanClassName);
 
 }

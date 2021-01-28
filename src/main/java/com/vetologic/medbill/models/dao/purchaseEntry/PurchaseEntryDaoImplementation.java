@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import com.vetologic.medbill.beans.purchaseEntry.PurchaseEntryBean;
 
 @Repository
-public class PurchaseEntryDaoImplementation implements PurchaseEntryDao{
+public class PurchaseEntryDaoImplementation implements PurchaseEntryDao {
 
 	@Autowired
 	private EntityManager entityManager;
@@ -21,7 +21,6 @@ public class PurchaseEntryDaoImplementation implements PurchaseEntryDao{
 	private Session getSession() {
 		return entityManager.unwrap(Session.class);
 	}
-	
 
 	@Override
 	public int save(Object object) {
@@ -34,7 +33,7 @@ public class PurchaseEntryDaoImplementation implements PurchaseEntryDao{
 		}
 		return (int) serializable;
 	}
-	
+
 	@Override
 	public boolean deletePurchaseEntry(PurchaseEntryBean purchase) {
 		Session session = getSession();
@@ -60,5 +59,5 @@ public class PurchaseEntryDaoImplementation implements PurchaseEntryDao{
 		}
 		return listOfObjects;
 	}
-	
+
 }
