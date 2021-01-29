@@ -10,16 +10,16 @@ import org.springframework.stereotype.Service;
 import com.vetologic.medbill.models.dao.productCategoryMaster.ProductCategoryDao;
 
 @Service
-public class ProductCategoryServiceImplementation implements ProductCategoryService{
+public class ProductCategoryServiceImplementation implements ProductCategoryService {
 
 	@Autowired
 	private ProductCategoryDao productCategoryDao;
-	
+
 	@Override
 	public List<?> getAll(String beanClassName) {
 		return productCategoryDao.getAll(beanClassName);
 	}
-	
+
 	@Transactional
 	@Override
 	public int save(Object object) {

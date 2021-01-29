@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class SupplierMasterDaoImplementation implements SupplierMasterDao{
+public class SupplierMasterDaoImplementation implements SupplierMasterDao {
 
 	@Autowired
 	private EntityManager entityManager;
@@ -19,7 +19,7 @@ public class SupplierMasterDaoImplementation implements SupplierMasterDao{
 	private Session getSession() {
 		return entityManager.unwrap(Session.class);
 	}
-	
+
 	@Override
 	public List<?> getAll(String beanClassName) {
 		Session session = getSession();
@@ -34,7 +34,6 @@ public class SupplierMasterDaoImplementation implements SupplierMasterDao{
 		return listOfObjects;
 	}
 
-	
 	@Override
 	public int save(Object object) {
 		Serializable serializable = 0;
@@ -46,14 +45,14 @@ public class SupplierMasterDaoImplementation implements SupplierMasterDao{
 		}
 		return (int) serializable;
 	}
-	
 
 	@Override
 	public Object getById(String beanClassName, int id) {
 		Session session = getSession();
 		Object object = null;
 		try {
-			Query<?> query = session.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND supplierId = ?1");
+			Query<?> query = session
+					.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND supplierId = ?1");
 			query.setParameter(0, 0);
 			query.setParameter(1, id);
 			object = query.uniqueResult();
@@ -74,5 +73,5 @@ public class SupplierMasterDaoImplementation implements SupplierMasterDao{
 			return false;
 		}
 	}
-	
+
 }

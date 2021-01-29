@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vetologic.medbill.beans.productCategoryMaster.ProductCategoryMasterBean;
 import com.vetologic.medbill.beans.response.MedbillResponse;
 import com.vetologic.medbill.beans.supplierMaster.SupplierMasterBean;
 import com.vetologic.medbill.models.service.supplierMaster.SupplierMasterService;
@@ -26,14 +25,15 @@ import com.vetologic.medbill.utils.AppUtil;
 @CrossOrigin(origins = "*", allowedHeaders = "*", allowCredentials = "true")
 @RequestMapping("supplierMaster")
 public class SupplierMasterController {
-	
+
 	private static Logger log = LoggerFactory.getLogger(SupplierMasterController.class);
 
 	@Autowired
 	private SupplierMasterService supplierMasterService;
-	
+
 	@PostMapping(path = "/addSupplier", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public MedbillResponse saveSupplier(@RequestBody SupplierMasterBean supplierMasterBean, MedbillResponse medbillResponse) {
+	public MedbillResponse saveSupplier(@RequestBody SupplierMasterBean supplierMasterBean,
+			MedbillResponse medbillResponse) {
 		supplierMasterBean.setDeletionFlag(0);
 		supplierMasterBean.setCreatedDate(AppUtil.currentDateWithTime());
 		int id = supplierMasterService.save(supplierMasterBean);
@@ -50,7 +50,7 @@ public class SupplierMasterController {
 		}
 		return medbillResponse;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@GetMapping(path = "/listSupplier", produces = MediaType.APPLICATION_JSON_VALUE)
 	public MedbillResponse listSupplier(MedbillResponse medbillResponse) {
@@ -66,7 +66,7 @@ public class SupplierMasterController {
 		}
 		return medbillResponse;
 	}
-	
+
 	@PutMapping(path = "/deleteSupplier", produces = MediaType.APPLICATION_JSON_VALUE)
 	public MedbillResponse deleteSupplierDetails(@RequestParam("supplierId") int supplierId,
 			MedbillResponse medbillResponse) {
@@ -94,7 +94,8 @@ public class SupplierMasterController {
 
 	@GetMapping(path = "/getSupplierDetails/{supplierId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public MedbillResponse getSupplierDetailById(@PathVariable int supplierId, MedbillResponse medbillResponse) {
-		SupplierMasterBean supplierDetail = (SupplierMasterBean) supplierMasterService.getById("SupplierMasterBean", supplierId);
+		SupplierMasterBean supplierDetail = (SupplierMasterBean) supplierMasterService.getById("SupplierMasterBean",
+				supplierId);
 		if (supplierDetail != null) {
 			medbillResponse.setObject(supplierDetail);
 			medbillResponse.setSuccess(true);
@@ -105,11 +106,12 @@ public class SupplierMasterController {
 		}
 		return medbillResponse;
 	}
-	
+
 	@PutMapping(path = "/updateSupplierDetail", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public MedbillResponse updateSupplierDetail(@RequestBody SupplierMasterBean supplierMasterBeanDetail, MedbillResponse medbillResponse) {
-		SupplierMasterBean supplierMasterBean = (SupplierMasterBean) supplierMasterService
-				.getById("SupplierMasterBean", supplierMasterBeanDetail.getSupplierId());
+	public MedbillResponse updateSupplierDetail(@RequestBody SupplierMasterBean supplierMasterBeanDetail,
+			MedbillResponse medbillResponse) {
+		SupplierMasterBean supplierMasterBean = (SupplierMasterBean) supplierMasterService.getById("SupplierMasterBean",
+				supplierMasterBeanDetail.getSupplierId());
 		if (supplierMasterBean != null) {
 			supplierMasterBean.setSupplierName(supplierMasterBeanDetail.getSupplierName());
 			supplierMasterBean.setContactNumber(supplierMasterBeanDetail.getContactNumber());

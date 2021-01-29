@@ -60,4 +60,62 @@ public class PurchaseEntryDaoImplementation implements PurchaseEntryDao {
 		return listOfObjects;
 	}
 
+	@Override
+	public Object getById(String beanClassName, int id) {
+		Session session = getSession();
+		Object object = null;
+		try {
+			Query<?> query = session
+					.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND purchaseEntryId = ?1");
+			query.setParameter(0, 0);
+			query.setParameter(1, id);
+			object = query.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return object;
+	}
+
+	@Override
+	public boolean update(Object object) {
+		Session session = getSession();
+		try {
+			session.update(object);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	@Override
+	public List<?> getPurchaseEntryItemListByPurchaseEntryId(String beanClassName, int id) {
+		Session session = getSession();
+		List<?> listOfObjects = null;
+		try {
+			Query<?> query = session.createQuery(
+					"FROM " + beanClassName + " WHERE deletionFlag = ?0 AND purchaseEntryId.purchaseEntryId = ?1");
+			query.setParameter(0, 0);
+			query.setParameter(1, id);
+			listOfObjects = query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listOfObjects;
+	}
+	
+	@Override
+	public List<?> getAllExceptOne(String beanClassName, int id) {
+		Session session = getSession();
+		List<?> listOfObjects = null;
+		try {
+			Query<?> query = session.createQuery("FROM " + beanClassName + " WHERE deletionFlag=?0 AND id NOT IN(?1)");
+			query.setParameter(0, 0);
+			query.setParameter(1, id);
+			listOfObjects = query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listOfObjects;
+	}
 }

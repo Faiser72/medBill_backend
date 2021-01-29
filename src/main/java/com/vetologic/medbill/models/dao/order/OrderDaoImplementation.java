@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class OrderDaoImplementation implements OrderDao{
+public class OrderDaoImplementation implements OrderDao {
 
 	@Autowired
 	private EntityManager entityManager;
@@ -19,13 +19,14 @@ public class OrderDaoImplementation implements OrderDao{
 	private Session getSession() {
 		return entityManager.unwrap(Session.class);
 	}
-	
+
 	@Override
 	public List<?> getAllProductCategoryId(String beanClassName, int id) {
 		Session session = getSession();
 		List<?> listOfObjects = null;
 		try {
-			Query<?> query = session.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 and productCategory.categoryId = ?1");
+			Query<?> query = session.createQuery(
+					"FROM " + beanClassName + " WHERE deletionFlag = ?0 and productCategory.categoryId = ?1");
 			query.setParameter(0, 0);
 			query.setParameter(1, id);
 			listOfObjects = query.getResultList();
@@ -40,12 +41,12 @@ public class OrderDaoImplementation implements OrderDao{
 		String ticketId = null;
 		Session session = getSession();
 		try {
-			Query<String> query = session.createQuery("SELECT MAX(orderNumber) FROM OrderBean",String.class);
+			Query<String> query = session.createQuery("SELECT MAX(orderNumber) FROM OrderBean", String.class);
 			ticketId = query.uniqueResult();
 			return ticketId;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		}
 		return ticketId;
 	}
 
@@ -74,13 +75,14 @@ public class OrderDaoImplementation implements OrderDao{
 		}
 		return listOfObjects;
 	}
-	
+
 	@Override
 	public List<?> getOrderListByOederId(String beanClassName, int id) {
 		Session session = getSession();
 		List<?> listOfObjects = null;
 		try {
-			Query<?> query = session.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND orderId.orderId = ?1");
+			Query<?> query = session
+					.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND orderId.orderId = ?1");
 			query.setParameter(0, 0);
 			query.setParameter(1, id);
 			listOfObjects = query.getResultList();

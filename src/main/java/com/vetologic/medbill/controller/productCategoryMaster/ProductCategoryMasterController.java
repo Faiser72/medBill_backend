@@ -1,4 +1,5 @@
 package com.vetologic.medbill.controller.productCategoryMaster;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.List;
@@ -25,13 +26,14 @@ import com.vetologic.medbill.utils.AppUtil;
 @RequestMapping("productCategotyMaster")
 public class ProductCategoryMasterController {
 
-private static Logger log = LoggerFactory.getLogger(ProductCategoryMasterController.class);
-	
+	private static Logger log = LoggerFactory.getLogger(ProductCategoryMasterController.class);
+
 	@Autowired
 	private ProductCategoryService productCategoryService;
-	
+
 	@PostMapping(path = "/addProductCategory", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public MedbillResponse saveItemCategory(@RequestBody ProductCategoryMasterBean productCategoryMasterBean, MedbillResponse medbillResponse) {
+	public MedbillResponse saveItemCategory(@RequestBody ProductCategoryMasterBean productCategoryMasterBean,
+			MedbillResponse medbillResponse) {
 		productCategoryMasterBean.setDeletionFlag(0);
 		productCategoryMasterBean.setCreatedDate(AppUtil.currentDateWithTime());
 		int id = productCategoryService.save(productCategoryMasterBean);
@@ -48,7 +50,7 @@ private static Logger log = LoggerFactory.getLogger(ProductCategoryMasterControl
 		}
 		return medbillResponse;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@GetMapping(path = "/productCategoryList", produces = MediaType.APPLICATION_JSON_VALUE)
 	public MedbillResponse listAllProductCategory(MedbillResponse medbillResponse) {
@@ -69,8 +71,8 @@ private static Logger log = LoggerFactory.getLogger(ProductCategoryMasterControl
 	@PutMapping(path = "/deleteProductCategoryDetails", produces = MediaType.APPLICATION_JSON_VALUE)
 	public MedbillResponse deleteProductCategoryDetails(@RequestParam("categoryId") int categoryId,
 			MedbillResponse medbillResponse) {
-		ProductCategoryMasterBean productCategory = (ProductCategoryMasterBean) productCategoryService.getById("ProductCategoryMasterBean",
-				categoryId);
+		ProductCategoryMasterBean productCategory = (ProductCategoryMasterBean) productCategoryService
+				.getById("ProductCategoryMasterBean", categoryId);
 		if (productCategory != null) {
 			productCategory.setDeletionFlag(1);
 			if (productCategoryService.update(productCategory)) {
@@ -91,7 +93,8 @@ private static Logger log = LoggerFactory.getLogger(ProductCategoryMasterControl
 	}
 
 	@PutMapping(path = "/updateProductCategoryDetails", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public MedbillResponse updateProductCategoryDetails(@RequestBody ProductCategoryMasterBean productCategory, MedbillResponse medbillResponse) {
+	public MedbillResponse updateProductCategoryDetails(@RequestBody ProductCategoryMasterBean productCategory,
+			MedbillResponse medbillResponse) {
 		ProductCategoryMasterBean productCategoryDetails = (ProductCategoryMasterBean) productCategoryService
 				.getById("ProductCategoryMasterBean", productCategory.getCategoryId());
 		if (productCategoryDetails != null) {

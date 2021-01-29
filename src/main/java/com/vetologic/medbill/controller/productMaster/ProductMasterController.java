@@ -28,13 +28,13 @@ import com.vetologic.medbill.utils.AppUtil;
 public class ProductMasterController {
 
 	private static Logger log = LoggerFactory.getLogger(ProductCategoryMasterController.class);
-	
-	
+
 	@Autowired
 	private ProductMasterService productService;
-	
+
 	@PostMapping(path = "/addProduct", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public MedbillResponse saveProduct(@RequestBody ProductMasterBean productMasterBean, MedbillResponse medbillResponse) {
+	public MedbillResponse saveProduct(@RequestBody ProductMasterBean productMasterBean,
+			MedbillResponse medbillResponse) {
 		productMasterBean.setDeletionFlag(0);
 		productMasterBean.setCreatedDate(AppUtil.currentDateWithTime());
 		int id = productService.save(productMasterBean);
@@ -51,12 +51,11 @@ public class ProductMasterController {
 		}
 		return medbillResponse;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@GetMapping(path = "/productList", produces = MediaType.APPLICATION_JSON_VALUE)
 	public MedbillResponse listAllProducts(MedbillResponse medbillResponse) {
-		List<ProductMasterBean> productList = (List<ProductMasterBean>) productService
-				.getAll("ProductMasterBean");
+		List<ProductMasterBean> productList = (List<ProductMasterBean>) productService.getAll("ProductMasterBean");
 		if (productList.size() > 0) {
 			System.out.println("productList" + productList);
 			medbillResponse.setListObject(productList);
@@ -68,7 +67,7 @@ public class ProductMasterController {
 		}
 		return medbillResponse;
 	}
-	
+
 	@GetMapping(path = "/getProductDetails/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public MedbillResponse getProductDetails(@PathVariable int id, MedbillResponse medbillResponse) {
 		ProductMasterBean manufacturer = (ProductMasterBean) productService.getById("ProductMasterBean", id);
@@ -86,8 +85,7 @@ public class ProductMasterController {
 	@PutMapping(path = "/deleteProductDetails", produces = MediaType.APPLICATION_JSON_VALUE)
 	public MedbillResponse deleteProductDetails(@RequestParam("productId") int productId,
 			MedbillResponse medbillResponse) {
-		ProductMasterBean productCategory = (ProductMasterBean) productService.getById("ProductMasterBean",
-				productId);
+		ProductMasterBean productCategory = (ProductMasterBean) productService.getById("ProductMasterBean", productId);
 		if (productCategory != null) {
 			productCategory.setDeletionFlag(1);
 			if (productService.update(productCategory)) {
@@ -108,9 +106,10 @@ public class ProductMasterController {
 	}
 
 	@PutMapping(path = "/updateProductDetails", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public MedbillResponse updateProductDetails(@RequestBody ProductMasterBean product, MedbillResponse medbillResponse) {
-		ProductMasterBean productDetails = (ProductMasterBean) productService
-				.getById("ProductMasterBean", product.getProductId());
+	public MedbillResponse updateProductDetails(@RequestBody ProductMasterBean product,
+			MedbillResponse medbillResponse) {
+		ProductMasterBean productDetails = (ProductMasterBean) productService.getById("ProductMasterBean",
+				product.getProductId());
 		if (productDetails != null) {
 			productDetails.setProductCategory(product.getProductCategory());
 			productDetails.setManufacturer(product.getManufacturer());

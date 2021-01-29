@@ -11,14 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ManufactureDaoImplementation implements ManufactureDao{
+public class ManufactureDaoImplementation implements ManufactureDao {
 	@Autowired
 	private EntityManager entityManager;
 
 	private Session getSession() {
 		return entityManager.unwrap(Session.class);
 	}
-	
+
 	@Override
 	public List<?> getAll(String beanClassName) {
 		Session session = getSession();
@@ -33,7 +33,6 @@ public class ManufactureDaoImplementation implements ManufactureDao{
 		return listOfObjects;
 	}
 
-	
 	@Override
 	public int save(Object object) {
 		Serializable serializable = 0;
@@ -45,14 +44,14 @@ public class ManufactureDaoImplementation implements ManufactureDao{
 		}
 		return (int) serializable;
 	}
-	
 
 	@Override
 	public Object getById(String beanClassName, int id) {
 		Session session = getSession();
 		Object object = null;
 		try {
-			Query<?> query = session.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND manufacturerId = ?1");
+			Query<?> query = session
+					.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND manufacturerId = ?1");
 			query.setParameter(0, 0);
 			query.setParameter(1, id);
 			object = query.uniqueResult();
@@ -73,7 +72,7 @@ public class ManufactureDaoImplementation implements ManufactureDao{
 			return false;
 		}
 	}
-	
+
 	@Override
 	public List<?> getAllExceptOne(String beanClassName, int id) {
 		Session session = getSession();
@@ -89,4 +88,3 @@ public class ManufactureDaoImplementation implements ManufactureDao{
 		return listOfObjects;
 	}
 }
-

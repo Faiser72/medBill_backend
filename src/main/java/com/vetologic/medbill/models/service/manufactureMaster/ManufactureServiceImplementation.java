@@ -10,16 +10,16 @@ import org.springframework.stereotype.Service;
 import com.vetologic.medbill.models.dao.manufactureMaster.ManufactureDao;
 
 @Service
-public class ManufactureServiceImplementation implements ManufactureService{
-	
+public class ManufactureServiceImplementation implements ManufactureService {
+
 	@Autowired
 	private ManufactureDao manufactureDao;
-	
+
 	@Override
 	public List<?> getAll(String beanClassName) {
 		return manufactureDao.getAll(beanClassName);
 	}
-	
+
 	@Transactional
 	@Override
 	public int save(Object object) {

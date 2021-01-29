@@ -6,10 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.vetologic.medbill.models.dao.order.OrderDao;
-import com.vetologic.medbill.models.dao.productMaster.ProductMasterDao;
 
 @Service
-public class OrderServiceImplementation implements OrderService{
+public class OrderServiceImplementation implements OrderService {
 
 	@Autowired
 	private OrderDao orderDao;
@@ -28,12 +27,12 @@ public class OrderServiceImplementation implements OrderService{
 	public int save(Object object) {
 		return orderDao.save(object);
 	}
-	
+
 	@Override
 	public List<?> getAll(String beanClassName) {
 		return orderDao.getAll(beanClassName);
 	}
-	
+
 	@Override
 	public List<?> getOrderListByOederId(String beanClassName, int id) {
 		return orderDao.getOrderListByOederId(beanClassName, id);

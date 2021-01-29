@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -53,6 +54,53 @@ public class StockController {
 			medbillResponse.setSuccess(false);
 			medbillResponse.setMessage("stockItemList  is Empty");
 			log.info("stockItemList  is Empty");
+		}
+		return medbillResponse;
+	}
+
+	@GetMapping(path = "/getStockDetailsById/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public MedbillResponse getStockDetailsById(@PathVariable int id, MedbillResponse medbillResponse) {
+		StockItemBean stock = (StockItemBean) stockService.getById("StockItemBean", id);
+		if (stock != null) {
+			medbillResponse.setObject(stock);
+			medbillResponse.setSuccess(true);
+		} else {
+			medbillResponse.setSuccess(false);
+			medbillResponse.setMessage("stock Not Exist");
+			log.info("This stock Id: " + id + " Not Exist");
+		}
+		return medbillResponse;
+	}
+
+	@SuppressWarnings("unchecked")
+	@GetMapping(path = "/getStockItemListBtStockId/{stockId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public MedbillResponse getStockItemListBtStockId(@PathVariable int stockId, MedbillResponse medbillResponse) {
+		List<StockItemBean> stockItemList = (List<StockItemBean>) stockService
+				.getStockItemListByStockId("StockItemBean", stockId);
+		if (stockItemList.size() > 0) {
+			System.out.println("StockItem" + stockItemList);
+			medbillResponse.setListObject(stockItemList);
+			medbillResponse.setSuccess(true);
+		} else {
+			medbillResponse.setSuccess(false);
+			medbillResponse.setMessage("StockItem  is Empty");
+			log.info("StockItem is Empty");
+		}
+		return medbillResponse;
+	}
+
+	// get list of data except this id for validate unique in (edit)
+	@SuppressWarnings("unchecked")
+	@GetMapping(path = "/getStockListExceptOne/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public MedbillResponse getStockListExceptOne(@PathVariable int id, MedbillResponse medbillResponse) {
+		List<StockBean> StockListListExceptOne = (List<StockBean>) stockService.getAllExceptOne("StockBean", id);
+		if (StockListListExceptOne.size() > 0) {
+			medbillResponse.setListObject(StockListListExceptOne);
+			medbillResponse.setSuccess(true);
+		} else {
+			medbillResponse.setSuccess(false);
+			medbillResponse.setMessage("Stock List is Empty");
+			log.info("Stock List is Empty");
 		}
 		return medbillResponse;
 	}

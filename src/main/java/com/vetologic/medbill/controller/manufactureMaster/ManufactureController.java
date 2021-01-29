@@ -68,10 +68,11 @@ public class ManufactureController {
 		}
 		return medbillResponse;
 	}
-	
+
 	@GetMapping(path = "/getManufacturerDetails/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public MedbillResponse getmanufacturerDetailsById(@PathVariable int id, MedbillResponse medbillResponse) {
-		ManufacturerMasterBean manufacturer = (ManufacturerMasterBean) manufactureService.getById("ManufacturerMasterBean", id);
+		ManufacturerMasterBean manufacturer = (ManufacturerMasterBean) manufactureService
+				.getById("ManufacturerMasterBean", id);
 		if (manufacturer != null) {
 			medbillResponse.setObject(manufacturer);
 			medbillResponse.setSuccess(true);

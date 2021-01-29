@@ -13,12 +13,12 @@ import com.vetologic.medbill.models.dao.productMaster.ProductMasterDao;
 public class ProductMasterServiceImplementaion implements ProductMasterService {
 	@Autowired
 	private ProductMasterDao productDao;
-	
+
 	@Override
 	public List<?> getAll(String beanClassName) {
 		return productDao.getAll(beanClassName);
 	}
-	
+
 	@Transactional
 	@Override
 	public int save(Object object) {

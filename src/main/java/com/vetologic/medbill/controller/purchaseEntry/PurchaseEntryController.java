@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -115,6 +116,55 @@ public class PurchaseEntryController {
 			medbillResponse.setSuccess(false);
 			medbillResponse.setMessage("purchaseList  is Empty");
 			log.info("purchaseList  is Empty");
+		}
+		return medbillResponse;
+	}
+
+	@GetMapping(path = "/getPurchaseEntryDetailsById/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public MedbillResponse getPurchaseEntryDetailsById(@PathVariable int id, MedbillResponse medbillResponse) {
+		PurchaseEntryBean purchaseEntry = (PurchaseEntryBean) purchaseEntryService.getById("PurchaseEntryBean", id);
+		if (purchaseEntry != null) {
+			medbillResponse.setObject(purchaseEntry);
+			medbillResponse.setSuccess(true);
+		} else {
+			medbillResponse.setSuccess(false);
+			medbillResponse.setMessage("purchaseEntry Not Exist");
+			log.info("This purchaseEntry Id: " + id + " Not Exist");
+		}
+		return medbillResponse;
+	}
+
+	@SuppressWarnings("unchecked")
+	@GetMapping(path = "/getPurchaseEntryItemListByPurchaseId/{purchaseEntryId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public MedbillResponse getPurchaseEntryItemListByPurchaseId(@PathVariable int purchaseEntryId,
+			MedbillResponse medbillResponse) {
+		List<PurchaseEntryItemBean> purchaseItemList = (List<PurchaseEntryItemBean>) purchaseEntryService
+				.getPurchaseEntryItemListByPurchaseEntryId("PurchaseEntryItemBean", purchaseEntryId);
+		if (purchaseItemList.size() > 0) {
+			System.out.println("PurchaseEntryItem" + purchaseItemList);
+			medbillResponse.setListObject(purchaseItemList);
+			medbillResponse.setSuccess(true);
+		} else {
+			medbillResponse.setSuccess(false);
+			medbillResponse.setMessage("PurchaseEntryItem  is Empty");
+			log.info("PurchaseEntryItem is Empty");
+		}
+		return medbillResponse;
+	}
+
+	// get list of data except this id for validate unique in (edit)
+	@SuppressWarnings("unchecked")
+	@GetMapping(path = "/getPurchaseEntryListExceptOne/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public MedbillResponse getPurchaseEntryListExceptOne(@PathVariable int id, MedbillResponse medbillResponse) {
+		List<PurchaseEntryBean> purchaseEntryListExceptOne = (List<PurchaseEntryBean>) purchaseEntryService
+				.getAllExceptOne("PurchaseEntryBean", id);
+		if (purchaseEntryListExceptOne.size() > 0) {
+			medbillResponse.setListObject(purchaseEntryListExceptOne);
+			medbillResponse.setSuccess(true);
+		} else {
+			medbillResponse.setSuccess(false);
+			medbillResponse.setMessage("purchaseEntry List is Empty");
+			log.info("purchaseEntry List is Empty");
 		}
 		return medbillResponse;
 	}

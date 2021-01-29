@@ -30,4 +30,25 @@ public class StockServiceImplementation implements StockService {
 	public List<?> getAll(String beanClassName) {
 		return stockDao.getAll(beanClassName);
 	}
+
+	@Override
+	public Object getById(String beanClassName, int id) {
+		return stockDao.getById(beanClassName, id);
+	}
+
+	@Transactional
+	@Override
+	public boolean update(Object object) {
+		return stockDao.update(object);
+	}
+
+	@Override
+	public List<?> getStockItemListByStockId(String beanClassName, int id) {
+		return stockDao.getStockItemListByStockId(beanClassName, id);
+	}
+
+	@Override
+	public List<?> getAllExceptOne(String beanClassName, int id) {
+		return stockDao.getAllExceptOne(beanClassName, id);
+	}
 }

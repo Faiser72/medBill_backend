@@ -12,4 +12,12 @@ public interface PurchaseEntryDao {
 
 	boolean deletePurchaseEntry(PurchaseEntryBean purchase);
 
+	Object getById(String beanClassName, int id);
+
+	boolean update(Object object);
+
+	List<?> getPurchaseEntryItemListByPurchaseEntryId(String beanClassName, int id);
+	
+	List<?> getAllExceptOne(String beanClassName, int id);
+
 }

@@ -12,4 +12,12 @@ public interface StockDao {
 
 	List<?> getAll(String beanClassName);
 
+	Object getById(String beanClassName, int id);
+
+	boolean update(Object object);
+
+	List<?> getStockItemListByStockId(String beanClassName, int id);
+	
+	List<?> getAllExceptOne(String beanClassName, int id);
+
 }

@@ -27,14 +27,14 @@ import com.vetologic.medbill.utils.AppUtil;
 @RequestMapping("order")
 public class OrderController {
 
-private static Logger log = LoggerFactory.getLogger(ProductCategoryMasterController.class);
-	
+	private static Logger log = LoggerFactory.getLogger(ProductCategoryMasterController.class);
+
 	@Autowired
 	private OrderService orderService;
-	
+
 	@SuppressWarnings("unchecked")
 	@GetMapping(path = "/listProductByCategoryId/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public MedbillResponse listAllProductByCategoryId(@PathVariable int id,MedbillResponse medbillResponse) {
+	public MedbillResponse listAllProductByCategoryId(@PathVariable int id, MedbillResponse medbillResponse) {
 		List<ProductMasterBean> productList = (List<ProductMasterBean>) orderService
 				.getAllProductCategoryId("ProductMasterBean", id);
 		if (productList.size() > 0) {
@@ -48,7 +48,7 @@ private static Logger log = LoggerFactory.getLogger(ProductCategoryMasterControl
 		}
 		return medbillResponse;
 	}
-	
+
 	@GetMapping(value = "/getOrderIdAuto", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public MedbillResponse getOrderIdAuto(MedbillResponse medbillResponse) {
 		try {
@@ -70,7 +70,7 @@ private static Logger log = LoggerFactory.getLogger(ProductCategoryMasterControl
 		}
 		return medbillResponse;
 	}
-	
+
 	@PostMapping(path = "/addOrder", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public MedbillResponse saveOrder(@RequestBody OrderBean orderBean, MedbillResponse medbillResponse) {
 		orderBean.setDeletionFlag(0);
@@ -91,15 +91,14 @@ private static Logger log = LoggerFactory.getLogger(ProductCategoryMasterControl
 			medbillResponse.setSuccess(false);
 			medbillResponse.setMessage("Saved UnSucessfully");
 			log.info("Saved UnSucessfully");
-		}		
+		}
 		return medbillResponse;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@GetMapping(path = "/orderList", produces = MediaType.APPLICATION_JSON_VALUE)
 	public MedbillResponse listAllOrders(MedbillResponse medbillResponse) {
-		List<OrderBean> orderList = (List<OrderBean>) orderService
-				.getAll("OrderBean");
+		List<OrderBean> orderList = (List<OrderBean>) orderService.getAll("OrderBean");
 		if (orderList.size() > 0) {
 			System.out.println("productList" + orderList);
 			medbillResponse.setListObject(orderList);
@@ -111,12 +110,12 @@ private static Logger log = LoggerFactory.getLogger(ProductCategoryMasterControl
 		}
 		return medbillResponse;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@GetMapping(path = "/orderListByOrderId/{orderId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public MedbillResponse orderListByOrderId(@PathVariable int orderId, MedbillResponse medbillResponse) {
-		List<OrderItemBean> orderItemList = (List<OrderItemBean>) orderService
-				.getOrderListByOederId("OrderItemBean",orderId);
+		List<OrderItemBean> orderItemList = (List<OrderItemBean>) orderService.getOrderListByOederId("OrderItemBean",
+				orderId);
 		if (orderItemList.size() > 0) {
 			System.out.println("orderItemList" + orderItemList);
 			medbillResponse.setListObject(orderItemList);
