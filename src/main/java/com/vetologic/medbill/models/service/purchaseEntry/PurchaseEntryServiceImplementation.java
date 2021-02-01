@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vetologic.medbill.beans.purchaseEntry.PurchaseEntryBean;
+import com.vetologic.medbill.beans.purchaseEntry.PurchaseEntryItemBean;
 import com.vetologic.medbill.models.dao.purchaseEntry.PurchaseEntryDao;
 
 @Service
@@ -50,5 +51,10 @@ public class PurchaseEntryServiceImplementation implements PurchaseEntryService 
 	@Override
 	public List<?> getAllExceptOne(String beanClassName, int id) {
 		return purchaseEntryDao.getAllExceptOne(beanClassName, id);
+	}
+
+	@Override
+	public PurchaseEntryItemBean getPurchaseEntryItemBeanById(String branName, int purchaseBeanId, int purchaseListId) {
+		return purchaseEntryDao.getPurchaseEntryItemBeanById(branName, purchaseBeanId, purchaseListId);
 	}
 }

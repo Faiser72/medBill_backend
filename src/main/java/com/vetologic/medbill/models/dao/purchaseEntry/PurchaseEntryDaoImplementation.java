@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.vetologic.medbill.beans.purchaseEntry.PurchaseEntryBean;
+import com.vetologic.medbill.beans.purchaseEntry.PurchaseEntryItemBean;
 
 @Repository
 public class PurchaseEntryDaoImplementation implements PurchaseEntryDao {
@@ -103,7 +104,7 @@ public class PurchaseEntryDaoImplementation implements PurchaseEntryDao {
 		}
 		return listOfObjects;
 	}
-	
+
 	@Override
 	public List<?> getAllExceptOne(String beanClassName, int id) {
 		Session session = getSession();
@@ -117,5 +118,22 @@ public class PurchaseEntryDaoImplementation implements PurchaseEntryDao {
 			e.printStackTrace();
 		}
 		return listOfObjects;
+	}
+
+	@Override
+	public PurchaseEntryItemBean getPurchaseEntryItemBeanById(String branName, int purchaseBeanId, int purchaseListId) {
+		Session session = getSession();
+		PurchaseEntryItemBean object = null;
+		try {
+			Query<?> query = session.createQuery("FROM " + branName
+					+ " WHERE deletionFlag = ?0 AND purchaseEntryId.purchaseEntryId = ?1 AND purchaseEntryItemId=?2 ");
+			query.setParameter(0, 0);
+			query.setParameter(1, purchaseBeanId);
+			query.setParameter(2, purchaseListId);
+			object = (PurchaseEntryItemBean) query.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return object;
 	}
 }

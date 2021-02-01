@@ -3,6 +3,7 @@ package com.vetologic.medbill.models.dao.stock;
 import java.util.List;
 
 import com.vetologic.medbill.beans.stock.StockBean;
+import com.vetologic.medbill.beans.stock.StockItemBean;
 
 public interface StockDao {
 
@@ -17,7 +18,11 @@ public interface StockDao {
 	boolean update(Object object);
 
 	List<?> getStockItemListByStockId(String beanClassName, int id);
-	
+
 	List<?> getAllExceptOne(String beanClassName, int id);
+
+	StockItemBean getStockItemBeanById(String beanName, int stockBeanId, int stockListId);
+
+	Object getByOrderNumber(String beanClassName, int orderBean);
 
 }

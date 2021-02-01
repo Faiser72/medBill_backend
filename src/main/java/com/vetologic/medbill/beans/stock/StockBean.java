@@ -57,4 +57,7 @@ public class StockBean extends AbstractCreatedAndUpdated {
 	@Transient
 	private List<StockItemBean> stockList;
 
+	@Column(name = "STOCK_DISCOUNT_IN_PERCENTAGE")
+	private String purchaseEntryDiscountInPercentage;
+
 }

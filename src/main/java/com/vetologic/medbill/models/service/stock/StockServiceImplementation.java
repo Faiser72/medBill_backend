@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vetologic.medbill.beans.stock.StockBean;
+import com.vetologic.medbill.beans.stock.StockItemBean;
 import com.vetologic.medbill.models.dao.stock.StockDao;
 
 @Service
@@ -50,5 +51,15 @@ public class StockServiceImplementation implements StockService {
 	@Override
 	public List<?> getAllExceptOne(String beanClassName, int id) {
 		return stockDao.getAllExceptOne(beanClassName, id);
+	}
+
+	@Override
+	public StockItemBean getStockItemBeanById(String beanName, int stockBeanId, int stockListId) {
+		return stockDao.getStockItemBeanById(beanName, stockBeanId, stockListId);
+	}
+
+	@Override
+	public Object getByOrderNumber(String beanClassName, int orderBean) {
+		return stockDao.getByOrderNumber(beanClassName, orderBean);
 	}
 }

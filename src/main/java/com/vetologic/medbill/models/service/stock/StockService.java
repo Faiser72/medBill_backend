@@ -3,6 +3,7 @@ package com.vetologic.medbill.models.service.stock;
 import java.util.List;
 
 import com.vetologic.medbill.beans.stock.StockBean;
+import com.vetologic.medbill.beans.stock.StockItemBean;
 
 public interface StockService {
 
@@ -19,5 +20,9 @@ public interface StockService {
 	List<?> getStockItemListByStockId(String beanClassName, int id);
 
 	List<?> getAllExceptOne(String beanClassName, int id);
+
+	StockItemBean getStockItemBeanById(String beanName, int stockBeanId, int stockListId);
+
+	Object getByOrderNumber(String beanClassName, int orderBean);
 
 }

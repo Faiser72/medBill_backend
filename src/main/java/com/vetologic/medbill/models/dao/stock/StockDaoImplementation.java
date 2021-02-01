@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.vetologic.medbill.beans.stock.StockBean;
+import com.vetologic.medbill.beans.stock.StockItemBean;
 
 @Repository
 public class StockDaoImplementation implements StockDao {
@@ -102,7 +103,7 @@ public class StockDaoImplementation implements StockDao {
 		}
 		return listOfObjects;
 	}
-	
+
 	@Override
 	public List<?> getAllExceptOne(String beanClassName, int id) {
 		Session session = getSession();
@@ -116,5 +117,38 @@ public class StockDaoImplementation implements StockDao {
 			e.printStackTrace();
 		}
 		return listOfObjects;
+	}
+
+	@Override
+	public StockItemBean getStockItemBeanById(String beanName, int stockBeanId, int stockListId) {
+		Session session = getSession();
+		StockItemBean object = null;
+		try {
+			Query<?> query = session.createQuery(
+					"FROM " + beanName + " WHERE deletionFlag = ?0 AND stockId.stockId = ?1 AND stockItemId=?2 ");
+			query.setParameter(0, 0);
+			query.setParameter(1, stockBeanId);
+			query.setParameter(2, stockListId);
+			object = (StockItemBean) query.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return object;
+	}
+
+	@Override
+	public Object getByOrderNumber(String beanClassName, int orderBean) {
+		Session session = getSession();
+		Object object = null;
+		try {
+			Query<?> query = session
+					.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND orderNumber.orderId = ?1");
+			query.setParameter(0, 0);
+			query.setParameter(1, orderBean);
+			object = query.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return object;
 	}
 }

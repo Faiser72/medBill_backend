@@ -3,6 +3,7 @@ package com.vetologic.medbill.models.service.purchaseEntry;
 import java.util.List;
 
 import com.vetologic.medbill.beans.purchaseEntry.PurchaseEntryBean;
+import com.vetologic.medbill.beans.purchaseEntry.PurchaseEntryItemBean;
 
 public interface PurchaseEntryService {
 
@@ -19,5 +20,7 @@ public interface PurchaseEntryService {
 	List<?> getPurchaseEntryItemListByPurchaseEntryId(String beanClassName, int id);
 
 	List<?> getAllExceptOne(String beanClassName, int id);
+
+	PurchaseEntryItemBean getPurchaseEntryItemBeanById(String branName, int purchaseBeanId, int purchaseListId);
 
 }
