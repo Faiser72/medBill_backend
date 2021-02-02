@@ -11,6 +11,7 @@ import javax.persistence.Table;
 
 import com.vetologic.medbill.beans.productCategoryMaster.ProductCategoryMasterBean;
 import com.vetologic.medbill.beans.productMaster.ProductMasterBean;
+import com.vetologic.medbill.beans.purchaseEntry.PurchaseEntryItemBean;
 import com.vetologic.medbill.utils.AbstractCreatedAndUpdated;
 
 import lombok.Data;
@@ -65,4 +66,9 @@ public class StockItemBean extends AbstractCreatedAndUpdated {
 
 	@Column(name = "STOCK_ITM_TOTAL_AMT")
 	private String amount;
+	
+	@ManyToOne
+	@JoinColumn(name = "PURCHASE_ITEM_ID")
+	private PurchaseEntryItemBean purcItemBean;
+	
 }

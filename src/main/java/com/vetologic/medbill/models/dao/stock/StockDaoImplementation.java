@@ -125,7 +125,7 @@ public class StockDaoImplementation implements StockDao {
 		StockItemBean object = null;
 		try {
 			Query<?> query = session.createQuery(
-					"FROM " + beanName + " WHERE deletionFlag = ?0 AND stockId.stockId = ?1 AND stockItemId=?2 ");
+					"FROM " + beanName + " WHERE deletionFlag = ?0 AND stockId.stockId = ?1 AND purcItemBean.purchaseEntryItemId=?2 ");
 			query.setParameter(0, 0);
 			query.setParameter(1, stockBeanId);
 			query.setParameter(2, stockListId);

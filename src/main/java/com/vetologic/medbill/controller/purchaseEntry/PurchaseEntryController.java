@@ -1,5 +1,6 @@
 package com.vetologic.medbill.controller.purchaseEntry;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -45,14 +46,31 @@ public class PurchaseEntryController {
 			purchaseEntryBean.setDeletionFlag(0);
 			purchaseEntryBean.setCreatedDate(AppUtil.currentDateWithTime());
 			int purchaseEntryId = purchaseEntryService.save(purchaseEntryBean);
-			System.err.println(purchaseEntryBean);
+
+			List<StockItemBean> stockList = new ArrayList<>();
 			if (purchaseEntryId != 0) {
 				purchaseEntryBean.setPurchaseEntryId(purchaseEntryId);
 				for (PurchaseEntryItemBean purchaseItems : purchaseEntryBean.getPurchaseEntryList()) {
 					purchaseItems.setCreatedDate(AppUtil.currentDateWithTime());
 					purchaseItems.setPurchaseEntryId(purchaseEntryBean);
 					purchaseItems.setDeletionFlag(0);
-					purchaseEntryService.save(purchaseItems);
+					int listId = purchaseEntryService.save(purchaseItems);
+					if (listId > 0) {
+						StockItemBean stocks = new StockItemBean();
+						purchaseItems.setPurchaseEntryItemId(listId);
+						stocks.setPurcItemBean(purchaseItems);
+						stocks.setAmount(purchaseItems.getAmount());
+						stocks.setBatchNumber(purchaseItems.getBatchNumber());
+						stocks.setExpiryDate(purchaseItems.getExpiryDate());
+						stocks.setManufactureDate(purchaseItems.getManufactureDate());
+						stocks.setManufacturer(purchaseItems.getManufacturer());
+						stocks.setPackaging(purchaseItems.getPackaging());
+						stocks.setProductName(purchaseItems.getProductName());
+						stocks.setProductType(purchaseItems.getProductType());
+						stocks.setQuantity(purchaseItems.getQuantity());
+						stocks.setUnitPrice(purchaseItems.getUnitPrice());
+						stockList.add(stocks);
+					}
 				}
 				log.info("Saved Sucessfully & Saved Purchase Id is: " + purchaseEntryId);
 
@@ -64,14 +82,13 @@ public class PurchaseEntryController {
 				stockBean.setPurchaseEntryTax(purchaseEntryBean.getPurchaseEntryTax());
 				stockBean.setPurchaseEntryTotal(purchaseEntryBean.getPurchaseEntryTotal());
 				stockBean.setReceivedDate(purchaseEntryBean.getReceivedDate());
-				stockBean.setStockList(purchaseEntryBean.getStockList());
+				// stockBean.setStockList(purchaseEntryBean.getStockList());
 				stockBean.setSupplierInvoiceNumber(purchaseEntryBean.getSupplierInvoiceNumber());
 				stockBean
 						.setPurchaseEntryDiscountInPercentage(purchaseEntryBean.getPurchaseEntryDiscountInPercentage());
 				int stockId = stockService.save(stockBean);
-				System.err.println(stockBean);
 				if (stockId != 0) {
-					for (StockItemBean stockItems : stockBean.getStockList()) {
+					for (StockItemBean stockItems : stockList) {
 						stockItems.setCreatedDate(AppUtil.currentDateWithTime());
 						stockItems.setStockId(stockBean);
 						stockItems.setDeletionFlag(0);
@@ -177,82 +194,107 @@ public class PurchaseEntryController {
 			MedbillResponse MedbillResponse) {
 		PurchaseEntryBean purchaseEntryDetails = (PurchaseEntryBean) purchaseEntryService.getById("PurchaseEntryBean",
 				purchaseEntryBean.getPurchaseEntryId());
-		purchaseEntryDetails.setOrderNumber(purchaseEntryBean.getOrderNumber());
-		purchaseEntryDetails.setPurchaseEntryDiscount(purchaseEntryBean.getPurchaseEntryDiscount());
-		purchaseEntryDetails
-				.setPurchaseEntryDiscountInPercentage(purchaseEntryBean.getPurchaseEntryDiscountInPercentage());
-		purchaseEntryDetails.setPurchaseEntryList(purchaseEntryBean.getPurchaseEntryList());
-		purchaseEntryDetails.setPurchaseEntrySubTotal(purchaseEntryBean.getPurchaseEntrySubTotal());
-		purchaseEntryDetails.setPurchaseEntryTax(purchaseEntryBean.getPurchaseEntryTax());
-		purchaseEntryDetails.setPurchaseEntryTotal(purchaseEntryBean.getPurchaseEntryTotal());
-		purchaseEntryDetails.setStockList(purchaseEntryBean.getStockList());
-		purchaseEntryDetails.setSupplierInvoiceNumber(purchaseEntryBean.getSupplierInvoiceNumber());
-		purchaseEntryDetails.setUpdatedDate(AppUtil.currentDateWithTime());
-		
-		System.out.println("purchaseEntryDetails.getPurchaseEntryId()" + purchaseEntryDetails.getPurchaseEntryId());
 
-		if (purchaseEntryService.update(purchaseEntryDetails)) {
-		   List<PurchaseEntryItemBean> list = 	purchaseEntryBean.getPurchaseEntryList();
-		   for (PurchaseEntryItemBean purchase : list) {
-//				System.out.println("Size" +purchaseEntryBean.getPurchaseEntryList().size());
-//				System.out.println("purchase.getPurchaseEntryId().getPurchaseEntryId() "+purchaseEntryDetails.getPurchaseEntryId());
-//				System.out.println("purchase.getPurchaseEntryItemId() "+purchase.getPurchaseEntryItemId());
-				System.out.println("List data "+purchase.getPurchaseEntryItemId());
-				PurchaseEntryItemBean purchaseEntryItemBean = purchaseEntryService.getPurchaseEntryItemBeanById(
-						"PurchaseEntryItemBean", purchase.getPurchaseEntryId().getPurchaseEntryId(),
-						purchase.getPurchaseEntryItemId());
-				//System.err.println(purchaseEntryItemBean);
-				purchaseEntryItemBean.setPackaging(purchase.getPackaging());
-				purchaseEntryItemBean.setQuantity(purchase.getQuantity());
-				purchaseEntryItemBean.setUnitPrice(purchase.getUnitPrice());
-				purchaseEntryItemBean.setBatchNumber(purchase.getBatchNumber());
-				purchaseEntryItemBean.setManufactureDate(purchase.getManufactureDate());
-				purchaseEntryItemBean.setExpiryDate(purchase.getExpiryDate());
-				purchaseEntryItemBean.setAmount(purchase.getAmount());
-				purchaseEntryService.update(purchaseEntryItemBean);
-			}
+		if (purchaseEntryDetails != null) {
+			purchaseEntryDetails.setOrderNumber(purchaseEntryBean.getOrderNumber());
+			purchaseEntryDetails.setPurchaseEntryDiscount(purchaseEntryBean.getPurchaseEntryDiscount());
+			purchaseEntryDetails
+					.setPurchaseEntryDiscountInPercentage(purchaseEntryBean.getPurchaseEntryDiscountInPercentage());
+			purchaseEntryDetails.setPurchaseEntryList(purchaseEntryBean.getPurchaseEntryList());
+			purchaseEntryDetails.setPurchaseEntrySubTotal(purchaseEntryBean.getPurchaseEntrySubTotal());
+			purchaseEntryDetails.setPurchaseEntryTax(purchaseEntryBean.getPurchaseEntryTax());
+			purchaseEntryDetails.setPurchaseEntryTotal(purchaseEntryBean.getPurchaseEntryTotal());
+			purchaseEntryDetails.setStockList(purchaseEntryBean.getStockList());
+			purchaseEntryDetails.setSupplierInvoiceNumber(purchaseEntryBean.getSupplierInvoiceNumber());
+			purchaseEntryDetails.setReceivedDate(purchaseEntryBean.getReceivedDate());
+			purchaseEntryDetails.setUpdatedDate(AppUtil.currentDateWithTime());
 
-			StockBean stockDetails = (StockBean) stockService.getByOrderNumber("StockBean", purchaseEntryBean.getOrderNumber().getOrderId());
+			System.out.println("purchaseEntryDetails.getPurchaseEntryId()" + purchaseEntryDetails.getPurchaseEntryId());
 
-			stockDetails.setOrderNumber(purchaseEntryBean.getOrderNumber());
-			stockDetails.setPurchaseEntryDiscount(purchaseEntryBean.getPurchaseEntryDiscount());
-			stockDetails.setPurchaseEntryDiscountInPercentage(purchaseEntryBean.getPurchaseEntryDiscountInPercentage());
-//			stockDetails.setPurchaseEntryList(purchaseEntryBean.getPurchaseEntryList());
-			stockDetails.setPurchaseEntrySubTotal(purchaseEntryBean.getPurchaseEntrySubTotal());
-			stockDetails.setPurchaseEntryTax(purchaseEntryBean.getPurchaseEntryTax());
-			stockDetails.setPurchaseEntryTotal(purchaseEntryBean.getPurchaseEntryTotal());
-			stockDetails.setStockList(purchaseEntryBean.getStockList());
-			stockDetails.setSupplierInvoiceNumber(purchaseEntryBean.getSupplierInvoiceNumber());
-			stockDetails.setUpdatedDate(AppUtil.currentDateWithTime());
-
-			if (stockService.update(stockDetails)) {
-				for (StockItemBean stock : stockDetails.getStockList()) {
-					System.err.println(stock);
-					StockItemBean stockItemBean = stockService.getStockItemBeanById("StockItemBean",
-							stock.getStockId().getStockId(), stock.getStockItemId());
-					stockItemBean.setPackaging(stock.getPackaging());
-					stockItemBean.setQuantity(stock.getQuantity());
-					stockItemBean.setUnitPrice(stock.getUnitPrice());
-					stockItemBean.setBatchNumber(stock.getBatchNumber());
-					stockItemBean.setManufactureDate(stock.getManufactureDate());
-					stockItemBean.setExpiryDate(stock.getExpiryDate());
-					stockItemBean.setAmount(stock.getAmount());
-					stockService.update(stockItemBean);
+			List<StockItemBean> stockList = new ArrayList<>();
+			if (purchaseEntryService.update(purchaseEntryDetails)) {
+				List<PurchaseEntryItemBean> list = purchaseEntryBean.getPurchaseEntryList();
+				for (PurchaseEntryItemBean purchase : list) {
+					PurchaseEntryItemBean purchaseEntryItemBean = purchaseEntryService.getPurchaseEntryItemBeanById(
+							"PurchaseEntryItemBean", purchase.getPurchaseEntryId().getPurchaseEntryId(),
+							purchase.getPurchaseEntryItemId());
+					purchaseEntryItemBean.setPackaging(purchase.getPackaging());
+					purchaseEntryItemBean.setQuantity(purchase.getQuantity());
+					purchaseEntryItemBean.setUnitPrice(purchase.getUnitPrice());
+					purchaseEntryItemBean.setBatchNumber(purchase.getBatchNumber());
+					purchaseEntryItemBean.setManufactureDate(purchase.getManufactureDate());
+					purchaseEntryItemBean.setExpiryDate(purchase.getExpiryDate());
+					purchaseEntryItemBean.setAmount(purchase.getAmount());
+					purchaseEntryItemBean.setUpdatedDate(AppUtil.currentDateWithTime());
+					if (purchaseEntryService.update(purchaseEntryItemBean)) {
+						StockItemBean stocks = new StockItemBean();
+						stocks.setPurcItemBean(purchaseEntryItemBean);
+						stocks.setAmount(purchaseEntryItemBean.getAmount());
+						stocks.setBatchNumber(purchaseEntryItemBean.getBatchNumber());
+						stocks.setExpiryDate(purchaseEntryItemBean.getExpiryDate());
+						stocks.setManufactureDate(purchaseEntryItemBean.getManufactureDate());
+						stocks.setManufacturer(purchaseEntryItemBean.getManufacturer());
+						stocks.setPackaging(purchaseEntryItemBean.getPackaging());
+						stocks.setProductName(purchaseEntryItemBean.getProductName());
+						stocks.setProductType(purchaseEntryItemBean.getProductType());
+						stocks.setQuantity(purchaseEntryItemBean.getQuantity());
+						stocks.setUnitPrice(purchaseEntryItemBean.getUnitPrice());
+						stockList.add(stocks);
+					}
 				}
+
+				StockBean stockDetails = (StockBean) stockService.getByOrderNumber("StockBean",
+						purchaseEntryBean.getOrderNumber().getOrderId());
+
+				stockDetails.setOrderNumber(purchaseEntryBean.getOrderNumber());
+				stockDetails.setPurchaseEntryDiscount(purchaseEntryBean.getPurchaseEntryDiscount());
+				stockDetails
+						.setPurchaseEntryDiscountInPercentage(purchaseEntryBean.getPurchaseEntryDiscountInPercentage());
+//				stockDetails.setPurchaseEntryList(purchaseEntryBean.getPurchaseEntryList());
+				stockDetails.setPurchaseEntrySubTotal(purchaseEntryBean.getPurchaseEntrySubTotal());
+				stockDetails.setPurchaseEntryTax(purchaseEntryBean.getPurchaseEntryTax());
+				stockDetails.setPurchaseEntryTotal(purchaseEntryBean.getPurchaseEntryTotal());
+				// stockDetails.setStockList(purchaseEntryBean.getStockList());
+				stockDetails.setSupplierInvoiceNumber(purchaseEntryBean.getSupplierInvoiceNumber());
+				stockDetails.setReceivedDate(purchaseEntryBean.getReceivedDate());
+				stockDetails.setUpdatedDate(AppUtil.currentDateWithTime());
+
+				if (stockService.update(stockDetails)) {
+					for (StockItemBean stock : stockList) {
+						System.err.println("stock.getPurcItemBean().getPurchaseEntryItemId() "
+								+ stock.getPurcItemBean().getPurchaseEntryItemId());
+						StockItemBean stockItemBean = stockService.getStockItemBeanById("StockItemBean",
+								stockDetails.getStockId(), stock.getPurcItemBean().getPurchaseEntryItemId());
+						stockItemBean.setPackaging(stock.getPackaging());
+						stockItemBean.setQuantity(stock.getQuantity());
+						stockItemBean.setUnitPrice(stock.getUnitPrice());
+						stockItemBean.setBatchNumber(stock.getBatchNumber());
+						stockItemBean.setManufactureDate(stock.getManufactureDate());
+						stockItemBean.setExpiryDate(stock.getExpiryDate());
+						stockItemBean.setAmount(stock.getAmount());
+						stockItemBean.setUpdatedDate(AppUtil.currentDateWithTime());
+						stockService.update(stockItemBean);
+					}
+				}
+//				else {
+//					MedbillResponse.setSuccess(false);
+//					MedbillResponse.setMessage("Update Failed");
+//					log.info("Update Failed");
+//				}		
+				MedbillResponse.setSuccess(true);
+				MedbillResponse.setMessage("Updated Successfully");
+				log.info("ThisPurchase Entry Id: " + purchaseEntryBean.getPurchaseEntryId() + " Deleted Successfully");
+			} else {
+				MedbillResponse.setSuccess(false);
+				MedbillResponse.setMessage("Update Failed");
+				log.info("Update Failed");
 			}
-//			else {
-//				MedbillResponse.setSuccess(false);
-//				MedbillResponse.setMessage("Update Failed");
-//				log.info("Update Failed");
-//			}		
-			MedbillResponse.setSuccess(true);
-			MedbillResponse.setMessage("Updated Successfully");
-			log.info("ThisPurchase Entry Id: " + purchaseEntryBean.getPurchaseEntryId() + " Deleted Successfully");
 		} else {
 			MedbillResponse.setSuccess(false);
-			MedbillResponse.setMessage("Update Failed");
-			log.info("Update Failed");
+			MedbillResponse.setMessage("This PurchaseEntryId  Not Exist");
+			log.info("This PurchaseEntry Id: " + purchaseEntryBean.getPurchaseEntryId() + " is Not Exist");
 		}
+
 		return MedbillResponse;
 	}
 
