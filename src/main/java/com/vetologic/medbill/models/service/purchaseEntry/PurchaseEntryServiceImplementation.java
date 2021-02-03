@@ -57,4 +57,9 @@ public class PurchaseEntryServiceImplementation implements PurchaseEntryService 
 	public PurchaseEntryItemBean getPurchaseEntryItemBeanById(String branName, int purchaseBeanId, int purchaseListId) {
 		return purchaseEntryDao.getPurchaseEntryItemBeanById(branName, purchaseBeanId, purchaseListId);
 	}
+
+	@Override
+	public boolean deletePurchaseEntryItemListByPurchaseEntryId(int purchaseEntryId) {
+		return purchaseEntryDao.deletePurchaseEntryItemListByPurchaseEntryId(purchaseEntryId);
+	}
 }

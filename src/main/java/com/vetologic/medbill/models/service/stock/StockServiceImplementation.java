@@ -62,4 +62,9 @@ public class StockServiceImplementation implements StockService {
 	public Object getByOrderNumber(String beanClassName, int orderBean) {
 		return stockDao.getByOrderNumber(beanClassName, orderBean);
 	}
+
+	@Override
+	public boolean deleteStockItemByStockId(int stockId) {
+		return stockDao.deleteStockItemByStockId(stockId);
+	}
 }

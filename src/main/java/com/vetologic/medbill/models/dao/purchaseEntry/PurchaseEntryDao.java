@@ -23,4 +23,6 @@ public interface PurchaseEntryDao {
 
 	PurchaseEntryItemBean getPurchaseEntryItemBeanById(String branName, int purchaseBeanId, int purchaseListId);
 
+	boolean deletePurchaseEntryItemListByPurchaseEntryId(int purchaseEntryId);
+
 }

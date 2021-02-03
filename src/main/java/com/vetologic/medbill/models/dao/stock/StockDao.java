@@ -25,4 +25,6 @@ public interface StockDao {
 
 	Object getByOrderNumber(String beanClassName, int orderBean);
 
+	boolean deleteStockItemByStockId(int stockId);
+
 }

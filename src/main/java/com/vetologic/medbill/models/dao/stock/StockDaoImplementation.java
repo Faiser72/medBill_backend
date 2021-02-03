@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.vetologic.medbill.beans.stock.StockBean;
 import com.vetologic.medbill.beans.stock.StockItemBean;
@@ -124,8 +125,8 @@ public class StockDaoImplementation implements StockDao {
 		Session session = getSession();
 		StockItemBean object = null;
 		try {
-			Query<?> query = session.createQuery(
-					"FROM " + beanName + " WHERE deletionFlag = ?0 AND stockId.stockId = ?1 AND purcItemBean.purchaseEntryItemId=?2 ");
+			Query<?> query = session.createQuery("FROM " + beanName
+					+ " WHERE deletionFlag = ?0 AND stockId.stockId = ?1 AND purcItemBean.purchaseEntryItemId=?2 ");
 			query.setParameter(0, 0);
 			query.setParameter(1, stockBeanId);
 			query.setParameter(2, stockListId);
@@ -151,4 +152,22 @@ public class StockDaoImplementation implements StockDao {
 		}
 		return object;
 	}
+
+	@Transactional
+	@Override
+	public boolean deleteStockItemByStockId(int stockId) {
+		Session session = getSession();
+		try {
+			Query<?> query = session.createQuery(
+					"UPDATE StockItemBean SET deletionFlag=?0 WHERE stockId.stockId=?1");
+			query.setParameter(0, 1);
+			query.setParameter(1, stockId);
+			query.executeUpdate();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 }

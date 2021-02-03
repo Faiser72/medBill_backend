@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vetologic.medbill.beans.purchaseEntry.PurchaseEntryBean;
@@ -298,4 +299,38 @@ public class PurchaseEntryController {
 		return MedbillResponse;
 	}
 
+	@PutMapping(path = "/deletePurchaseAndStock", produces = MediaType.APPLICATION_JSON_VALUE)
+	public MedbillResponse deletePurchaseAndStock(@RequestParam("purchaseEntryId") int purchaseEntryId,
+			MedbillResponse medbillResponse) {
+		PurchaseEntryBean purchaseEntry = (PurchaseEntryBean) purchaseEntryService.getById("PurchaseEntryBean",
+				purchaseEntryId);
+		if (purchaseEntry != null) {
+			System.err.println("deleteeeeeee" + purchaseEntry);
+			purchaseEntry.setDeletionFlag(1);
+			if (purchaseEntryService.update(purchaseEntry)) {
+				purchaseEntryService.deletePurchaseEntryItemListByPurchaseEntryId(purchaseEntryId); // to delete
+																									// purchaseEntryItems
+				StockBean stockDetails = (StockBean) stockService.getByOrderNumber("StockBean",
+						purchaseEntry.getOrderNumber().getOrderId());
+				if (stockDetails != null) {
+					stockDetails.setDeletionFlag(1);
+					if (stockService.update(stockDetails)) {
+						stockService.deleteStockItemByStockId(stockDetails.getStockId()); // to delete StockItem
+					}
+				}
+				medbillResponse.setSuccess(true);
+				medbillResponse.setMessage("Deleted Successfully");
+				log.info("This PurchaseEntry Id: " + purchaseEntryId + " Deleted Successfully");
+			} else {
+				medbillResponse.setSuccess(false);
+				medbillResponse.setMessage("Deletion Failed");
+				log.info("Deletion Failed");
+			}
+		} else {
+			medbillResponse.setSuccess(false);
+			medbillResponse.setMessage("This PurchaseEntry Not Exist");
+			log.info("This PurchaseEntry Id: " + purchaseEntryId + " is Not Exist");
+		}
+		return medbillResponse;
+	}
 }

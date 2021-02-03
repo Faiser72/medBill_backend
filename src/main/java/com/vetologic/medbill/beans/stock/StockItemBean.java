@@ -66,9 +66,9 @@ public class StockItemBean extends AbstractCreatedAndUpdated {
 
 	@Column(name = "STOCK_ITM_TOTAL_AMT")
 	private String amount;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "PURCHASE_ITEM_ID")
 	private PurchaseEntryItemBean purcItemBean;
-	
+
 }
