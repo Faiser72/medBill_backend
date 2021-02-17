@@ -53,7 +53,7 @@ public class PurchaseEntryDaoImplementation implements PurchaseEntryDao {
 		Session session = getSession();
 		List<?> listOfObjects = null;
 		try {
-			Query<?> query = session.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0");
+			Query<?> query = session.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND returnFlag=false");
 			query.setParameter(0, 0);
 			listOfObjects = query.getResultList();
 		} catch (Exception e) {
@@ -68,7 +68,7 @@ public class PurchaseEntryDaoImplementation implements PurchaseEntryDao {
 		Object object = null;
 		try {
 			Query<?> query = session
-					.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND purchaseEntryId = ?1");
+					.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND purchaseEntryId = ?1 AND returnFlag=false");
 			query.setParameter(0, 0);
 			query.setParameter(1, id);
 			object = query.uniqueResult();
@@ -96,7 +96,7 @@ public class PurchaseEntryDaoImplementation implements PurchaseEntryDao {
 		List<?> listOfObjects = null;
 		try {
 			Query<?> query = session.createQuery(
-					"FROM " + beanClassName + " WHERE deletionFlag = ?0 AND purchaseEntryId.purchaseEntryId = ?1");
+					"FROM " + beanClassName + " WHERE deletionFlag = ?0 AND purchaseEntryId.purchaseEntryId = ?1 AND returnFlag=false");
 			query.setParameter(0, 0);
 			query.setParameter(1, id);
 			listOfObjects = query.getResultList();
@@ -111,7 +111,7 @@ public class PurchaseEntryDaoImplementation implements PurchaseEntryDao {
 		Session session = getSession();
 		List<?> listOfObjects = null;
 		try {
-			Query<?> query = session.createQuery("FROM " + beanClassName + " WHERE deletionFlag=?0 AND id NOT IN(?1)");
+			Query<?> query = session.createQuery("FROM " + beanClassName + " WHERE deletionFlag=?0 AND id NOT IN(?1) AND returnFlag=false");
 			query.setParameter(0, 0);
 			query.setParameter(1, id);
 			listOfObjects = query.getResultList();
@@ -127,7 +127,7 @@ public class PurchaseEntryDaoImplementation implements PurchaseEntryDao {
 		PurchaseEntryItemBean object = null;
 		try {
 			Query<?> query = session.createQuery("FROM " + branName
-					+ " WHERE deletionFlag = ?0 AND purchaseEntryId.purchaseEntryId = ?1 AND purchaseEntryItemId=?2 ");
+					+ " WHERE deletionFlag = ?0 AND purchaseEntryId.purchaseEntryId = ?1 AND purchaseEntryItemId=?2 AND returnFlag=false");
 			query.setParameter(0, 0);
 			query.setParameter(1, purchaseBeanId);
 			query.setParameter(2, purchaseListId);

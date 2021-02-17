@@ -71,4 +71,7 @@ public class StockItemBean extends AbstractCreatedAndUpdated {
 	@JoinColumn(name = "PURCHASE_ITEM_ID")
 	private PurchaseEntryItemBean purcItemBean;
 
+	@Column(name = "STOCK_ITM_RETURN_FLAG")
+	private boolean returnFlag;
+
 }

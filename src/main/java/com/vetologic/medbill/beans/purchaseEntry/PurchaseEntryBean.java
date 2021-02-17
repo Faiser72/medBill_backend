@@ -1,3 +1,4 @@
+
 package com.vetologic.medbill.beans.purchaseEntry;
 
 import java.util.List;
@@ -54,14 +55,17 @@ public class PurchaseEntryBean extends AbstractCreatedAndUpdated {
 
 	@Column(name = "PUR_TOTAL_NET_AMT")
 	private String purchaseEntryTotal;
-	
+
 	@Transient
 	private List<PurchaseEntryItemBean> purchaseEntryList;
 
 	@Transient
 	private List<StockItemBean> stockList;
-	
+
 	@Column(name = "PUR_DISCOUNT_IN_PERCENTAGE")
 	private String purchaseEntryDiscountInPercentage;
+
+	@Column(name = "PUR_RETURN_FLAG")
+	private boolean returnFlag;
 
 }

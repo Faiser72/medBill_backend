@@ -65,4 +65,7 @@ public class PurchaseEntryItemBean extends AbstractCreatedAndUpdated {
 
 	@Column(name = "PUR_ITM_TOTAL_AMT")
 	private String amount;
+
+	@Column(name = "PUR_ITM_RETURN_FLAG")
+	private boolean returnFlag;
 }

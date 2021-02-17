@@ -60,4 +60,7 @@ public class StockBean extends AbstractCreatedAndUpdated {
 	@Column(name = "STOCK_DISCOUNT_IN_PERCENTAGE")
 	private String purchaseEntryDiscountInPercentage;
 
+	@Column(name = "STOCK_RETURN_FLAG")
+	private boolean returnFlag;
+
 }

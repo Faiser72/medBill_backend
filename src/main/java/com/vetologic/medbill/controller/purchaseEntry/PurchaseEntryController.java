@@ -45,6 +45,7 @@ public class PurchaseEntryController {
 			MedbillResponse medbillResponse) {
 		try {
 			purchaseEntryBean.setDeletionFlag(0);
+			purchaseEntryBean.setReturnFlag(false);
 			purchaseEntryBean.setCreatedDate(AppUtil.currentDateWithTime());
 			int purchaseEntryId = purchaseEntryService.save(purchaseEntryBean);
 
@@ -55,6 +56,7 @@ public class PurchaseEntryController {
 					purchaseItems.setCreatedDate(AppUtil.currentDateWithTime());
 					purchaseItems.setPurchaseEntryId(purchaseEntryBean);
 					purchaseItems.setDeletionFlag(0);
+					purchaseItems.setReturnFlag(false);
 					int listId = purchaseEntryService.save(purchaseItems);
 					if (listId > 0) {
 						StockItemBean stocks = new StockItemBean();
@@ -76,6 +78,7 @@ public class PurchaseEntryController {
 				log.info("Saved Sucessfully & Saved Purchase Id is: " + purchaseEntryId);
 
 				stockBean.setDeletionFlag(0);
+				stockBean.setReturnFlag(false);
 				stockBean.setCreatedDate(AppUtil.currentDateWithTime());
 				stockBean.setOrderNumber(purchaseEntryBean.getOrderNumber());
 				stockBean.setPurchaseEntryDiscount(purchaseEntryBean.getPurchaseEntryDiscount());
@@ -93,6 +96,7 @@ public class PurchaseEntryController {
 						stockItems.setCreatedDate(AppUtil.currentDateWithTime());
 						stockItems.setStockId(stockBean);
 						stockItems.setDeletionFlag(0);
+						stockItems.setReturnFlag(false);
 						purchaseEntryService.save(stockItems);
 					}
 					log.info("Saved Sucessfully & Saved Purchase Id is: " + stockId);
@@ -208,6 +212,7 @@ public class PurchaseEntryController {
 			purchaseEntryDetails.setStockList(purchaseEntryBean.getStockList());
 			purchaseEntryDetails.setSupplierInvoiceNumber(purchaseEntryBean.getSupplierInvoiceNumber());
 			purchaseEntryDetails.setReceivedDate(purchaseEntryBean.getReceivedDate());
+//			purchaseEntryDetails.setReturnFlag(purchaseEntryBean.isReturnFlag());
 			purchaseEntryDetails.setUpdatedDate(AppUtil.currentDateWithTime());
 
 			System.out.println("purchaseEntryDetails.getPurchaseEntryId()" + purchaseEntryDetails.getPurchaseEntryId());
@@ -226,6 +231,7 @@ public class PurchaseEntryController {
 					purchaseEntryItemBean.setManufactureDate(purchase.getManufactureDate());
 					purchaseEntryItemBean.setExpiryDate(purchase.getExpiryDate());
 					purchaseEntryItemBean.setAmount(purchase.getAmount());
+//					purchaseEntryItemBean.setReturnFlag(purchase.isReturnFlag());
 					purchaseEntryItemBean.setUpdatedDate(AppUtil.currentDateWithTime());
 					if (purchaseEntryService.update(purchaseEntryItemBean)) {
 						StockItemBean stocks = new StockItemBean();
@@ -258,6 +264,7 @@ public class PurchaseEntryController {
 				// stockDetails.setStockList(purchaseEntryBean.getStockList());
 				stockDetails.setSupplierInvoiceNumber(purchaseEntryBean.getSupplierInvoiceNumber());
 				stockDetails.setReceivedDate(purchaseEntryBean.getReceivedDate());
+//				stockDetails.setReturnFlag(purchaseEntryBean.isReturnFlag());
 				stockDetails.setUpdatedDate(AppUtil.currentDateWithTime());
 
 				if (stockService.update(stockDetails)) {
@@ -274,6 +281,7 @@ public class PurchaseEntryController {
 						stockItemBean.setExpiryDate(stock.getExpiryDate());
 						stockItemBean.setAmount(stock.getAmount());
 						stockItemBean.setUpdatedDate(AppUtil.currentDateWithTime());
+//						stockItemBean.setReturnFlag(stock.isReturnFlag());
 						stockService.update(stockItemBean);
 					}
 				}
@@ -332,5 +340,120 @@ public class PurchaseEntryController {
 			log.info("This PurchaseEntry Id: " + purchaseEntryId + " is Not Exist");
 		}
 		return medbillResponse;
+	}
+	
+	
+	@PutMapping(path = "/returnPurchaseEntryDetails", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public MedbillResponse returnPurchaseEntryDetails(@RequestBody PurchaseEntryBean purchaseEntryBean,
+			MedbillResponse MedbillResponse) {
+		PurchaseEntryBean purchaseEntryDetails = (PurchaseEntryBean) purchaseEntryService.getById("PurchaseEntryBean",
+				purchaseEntryBean.getPurchaseEntryId());
+
+		if (purchaseEntryDetails != null) {
+			purchaseEntryDetails.setOrderNumber(purchaseEntryBean.getOrderNumber());
+			purchaseEntryDetails.setPurchaseEntryDiscount(purchaseEntryBean.getPurchaseEntryDiscount());
+			purchaseEntryDetails
+					.setPurchaseEntryDiscountInPercentage(purchaseEntryBean.getPurchaseEntryDiscountInPercentage());
+			purchaseEntryDetails.setPurchaseEntryList(purchaseEntryBean.getPurchaseEntryList());
+			purchaseEntryDetails.setPurchaseEntrySubTotal(purchaseEntryBean.getPurchaseEntrySubTotal());
+			purchaseEntryDetails.setPurchaseEntryTax(purchaseEntryBean.getPurchaseEntryTax());
+			purchaseEntryDetails.setPurchaseEntryTotal(purchaseEntryBean.getPurchaseEntryTotal());
+			purchaseEntryDetails.setStockList(purchaseEntryBean.getStockList());
+			purchaseEntryDetails.setSupplierInvoiceNumber(purchaseEntryBean.getSupplierInvoiceNumber());
+			purchaseEntryDetails.setReceivedDate(purchaseEntryBean.getReceivedDate());
+			purchaseEntryDetails.setReturnFlag(purchaseEntryBean.isReturnFlag());
+			purchaseEntryDetails.setUpdatedDate(AppUtil.currentDateWithTime());
+
+			System.out.println("purchaseEntryDetails.getPurchaseEntryId()" + purchaseEntryDetails.getPurchaseEntryId());
+
+			List<StockItemBean> stockList = new ArrayList<>();
+			if (purchaseEntryService.update(purchaseEntryDetails)) {
+				List<PurchaseEntryItemBean> list = purchaseEntryBean.getPurchaseEntryList();
+				for (PurchaseEntryItemBean purchase : list) {
+					PurchaseEntryItemBean purchaseEntryItemBean = purchaseEntryService.getPurchaseEntryItemBeanById(
+							"PurchaseEntryItemBean", purchase.getPurchaseEntryId().getPurchaseEntryId(),
+							purchase.getPurchaseEntryItemId());
+					purchaseEntryItemBean.setPackaging(purchase.getPackaging());
+					purchaseEntryItemBean.setQuantity(purchase.getQuantity());
+					purchaseEntryItemBean.setUnitPrice(purchase.getUnitPrice());
+					purchaseEntryItemBean.setBatchNumber(purchase.getBatchNumber());
+					purchaseEntryItemBean.setManufactureDate(purchase.getManufactureDate());
+					purchaseEntryItemBean.setExpiryDate(purchase.getExpiryDate());
+					purchaseEntryItemBean.setAmount(purchase.getAmount());
+					purchaseEntryItemBean.setReturnFlag(purchase.isReturnFlag());
+					purchaseEntryItemBean.setUpdatedDate(AppUtil.currentDateWithTime());
+					if (purchaseEntryService.update(purchaseEntryItemBean)) {
+						StockItemBean stocks = new StockItemBean();
+						stocks.setPurcItemBean(purchaseEntryItemBean);
+						stocks.setAmount(purchaseEntryItemBean.getAmount());
+						stocks.setBatchNumber(purchaseEntryItemBean.getBatchNumber());
+						stocks.setExpiryDate(purchaseEntryItemBean.getExpiryDate());
+						stocks.setManufactureDate(purchaseEntryItemBean.getManufactureDate());
+						stocks.setManufacturer(purchaseEntryItemBean.getManufacturer());
+						stocks.setPackaging(purchaseEntryItemBean.getPackaging());
+						stocks.setProductName(purchaseEntryItemBean.getProductName());
+						stocks.setProductType(purchaseEntryItemBean.getProductType());
+						stocks.setQuantity(purchaseEntryItemBean.getQuantity());
+						stocks.setUnitPrice(purchaseEntryItemBean.getUnitPrice());
+						stocks.setReturnFlag(purchaseEntryItemBean.isReturnFlag());
+						stockList.add(stocks);
+					}
+				}
+
+				StockBean stockDetails = (StockBean) stockService.getByOrderNumber("StockBean",
+						purchaseEntryBean.getOrderNumber().getOrderId());
+
+				stockDetails.setOrderNumber(purchaseEntryBean.getOrderNumber());
+				stockDetails.setPurchaseEntryDiscount(purchaseEntryBean.getPurchaseEntryDiscount());
+				stockDetails
+						.setPurchaseEntryDiscountInPercentage(purchaseEntryBean.getPurchaseEntryDiscountInPercentage());
+//				stockDetails.setPurchaseEntryList(purchaseEntryBean.getPurchaseEntryList());
+				stockDetails.setPurchaseEntrySubTotal(purchaseEntryBean.getPurchaseEntrySubTotal());
+				stockDetails.setPurchaseEntryTax(purchaseEntryBean.getPurchaseEntryTax());
+				stockDetails.setPurchaseEntryTotal(purchaseEntryBean.getPurchaseEntryTotal());
+				// stockDetails.setStockList(purchaseEntryBean.getStockList());
+				stockDetails.setSupplierInvoiceNumber(purchaseEntryBean.getSupplierInvoiceNumber());
+				stockDetails.setReceivedDate(purchaseEntryBean.getReceivedDate());
+//				stockDetails.setReturnFlag(purchaseEntryBean.isReturnFlag());
+				stockDetails.setUpdatedDate(AppUtil.currentDateWithTime());
+
+				if (stockService.update(stockDetails)) {
+					for (StockItemBean stock : stockList) {
+						System.err.println("stock.getPurcItemBean().getPurchaseEntryItemId() "
+								+ stock.getPurcItemBean().getPurchaseEntryItemId());
+						StockItemBean stockItemBean = stockService.getStockItemBeanById("StockItemBean",
+								stockDetails.getStockId(), stock.getPurcItemBean().getPurchaseEntryItemId());
+						stockItemBean.setPackaging(stock.getPackaging());
+						stockItemBean.setQuantity(stock.getQuantity());
+						stockItemBean.setUnitPrice(stock.getUnitPrice());
+						stockItemBean.setBatchNumber(stock.getBatchNumber());
+						stockItemBean.setManufactureDate(stock.getManufactureDate());
+						stockItemBean.setExpiryDate(stock.getExpiryDate());
+						stockItemBean.setAmount(stock.getAmount());
+						stockItemBean.setUpdatedDate(AppUtil.currentDateWithTime());
+						stockItemBean.setReturnFlag(stock.isReturnFlag());
+						stockService.update(stockItemBean);
+					}
+				}
+//				else {
+//					MedbillResponse.setSuccess(false);
+//					MedbillResponse.setMessage("Update Failed");
+//					log.info("Update Failed");
+//				}		
+				MedbillResponse.setSuccess(true);
+				MedbillResponse.setMessage("Return Successfully");
+				log.info("ThisPurchase Entry Id: " + purchaseEntryBean.getPurchaseEntryId() + " Return Successfully");
+			} else {
+				MedbillResponse.setSuccess(false);
+				MedbillResponse.setMessage("Return Failed");
+				log.info("Return Failed");
+			}
+		} else {
+			MedbillResponse.setSuccess(false);
+			MedbillResponse.setMessage("This PurchaseEntryId  Not Exist");
+			log.info("This PurchaseEntry Id: " + purchaseEntryBean.getPurchaseEntryId() + " is Not Exist");
+		}
+
+		return MedbillResponse;
 	}
 }
