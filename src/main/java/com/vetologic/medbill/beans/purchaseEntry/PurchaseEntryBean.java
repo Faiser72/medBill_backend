@@ -68,4 +68,31 @@ public class PurchaseEntryBean extends AbstractCreatedAndUpdated {
 	@Column(name = "PUR_RETURN_FLAG")
 	private boolean returnFlag;
 
+	@Column(name = "PUR_PAYMENT_MODE")
+	private String paymentMode;
+
+	@Column(name = "PUR_CHECK_NO")
+	private String checkNo;
+
+	@Column(name = "PUR_CHECK_DATE")
+	private String checkDate;
+
+	@Column(name = "PUR_CHECK_BANK")
+	private String checkBank;
+
+	@Column(name = "PUR_CHECK_BRANCH")
+	private String checkBranch;
+
+	@Column(name = "PUR_DD_NO")
+	private String ddNo;
+
+	@Column(name = "PUR_DD_DATE")
+	private String ddDate;
+
+	@Column(name = "PUR_DD_BANK")
+	private String ddBank;
+
+	@Column(name = "PUR_DD_BRANCH")
+	private String ddBranch;
+
 }

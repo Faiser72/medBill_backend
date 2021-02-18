@@ -212,6 +212,16 @@ public class PurchaseEntryController {
 			purchaseEntryDetails.setStockList(purchaseEntryBean.getStockList());
 			purchaseEntryDetails.setSupplierInvoiceNumber(purchaseEntryBean.getSupplierInvoiceNumber());
 			purchaseEntryDetails.setReceivedDate(purchaseEntryBean.getReceivedDate());
+			purchaseEntryDetails.setCheckBank(purchaseEntryBean.getCheckBank());
+			purchaseEntryDetails.setCheckBranch(purchaseEntryBean.getCheckBranch());
+			purchaseEntryDetails.setCheckDate(purchaseEntryBean.getCheckDate());
+			purchaseEntryDetails.setCheckNo(purchaseEntryBean.getCheckNo());
+			purchaseEntryDetails.setDdBank(purchaseEntryBean.getDdBank());
+			purchaseEntryDetails.setDdBranch(purchaseEntryBean.getDdBranch());
+			purchaseEntryDetails.setDdDate(purchaseEntryBean.getDdDate());
+			purchaseEntryDetails.setDdNo(purchaseEntryBean.getDdNo());
+			purchaseEntryDetails.setPaymentMode(purchaseEntryBean.getPaymentMode());
+			
 //			purchaseEntryDetails.setReturnFlag(purchaseEntryBean.isReturnFlag());
 			purchaseEntryDetails.setUpdatedDate(AppUtil.currentDateWithTime());
 
