@@ -27,4 +27,6 @@ public interface StockDao {
 
 	boolean deleteStockItemByStockId(int stockId);
 
+	List<?> getStockItemListByProductId(String beanClassName, int productId);
+
 }

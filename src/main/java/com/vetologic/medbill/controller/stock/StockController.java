@@ -104,4 +104,21 @@ public class StockController {
 		}
 		return medbillResponse;
 	}
+
+	@SuppressWarnings("unchecked")
+	@GetMapping(path = "/getStockItemListByProductId/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public MedbillResponse getStockItemListByProductId(@PathVariable int productId, MedbillResponse medbillResponse) {
+		List<StockItemBean> stockItemList = (List<StockItemBean>) stockService
+				.getStockItemListByProductId("StockItemBean", productId);
+		if (stockItemList.size() > 0) {
+			System.out.println("StockItem" + stockItemList);
+			medbillResponse.setListObject(stockItemList);
+			medbillResponse.setSuccess(true);
+		} else {
+			medbillResponse.setSuccess(false);
+			medbillResponse.setMessage("StockItem  is Empty");
+			log.info("StockItem is Empty");
+		}
+		return medbillResponse;
+	}
 }

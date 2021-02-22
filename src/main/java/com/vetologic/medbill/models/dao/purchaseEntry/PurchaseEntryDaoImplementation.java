@@ -53,7 +53,8 @@ public class PurchaseEntryDaoImplementation implements PurchaseEntryDao {
 		Session session = getSession();
 		List<?> listOfObjects = null;
 		try {
-			Query<?> query = session.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND returnFlag=false");
+			Query<?> query = session
+					.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND returnFlag=false");
 			query.setParameter(0, 0);
 			listOfObjects = query.getResultList();
 		} catch (Exception e) {
@@ -67,8 +68,8 @@ public class PurchaseEntryDaoImplementation implements PurchaseEntryDao {
 		Session session = getSession();
 		Object object = null;
 		try {
-			Query<?> query = session
-					.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND purchaseEntryId = ?1 AND returnFlag=false");
+			Query<?> query = session.createQuery(
+					"FROM " + beanClassName + " WHERE deletionFlag = ?0 AND purchaseEntryId = ?1 AND returnFlag=false");
 			query.setParameter(0, 0);
 			query.setParameter(1, id);
 			object = query.uniqueResult();
@@ -95,8 +96,8 @@ public class PurchaseEntryDaoImplementation implements PurchaseEntryDao {
 		Session session = getSession();
 		List<?> listOfObjects = null;
 		try {
-			Query<?> query = session.createQuery(
-					"FROM " + beanClassName + " WHERE deletionFlag = ?0 AND purchaseEntryId.purchaseEntryId = ?1 AND returnFlag=false");
+			Query<?> query = session.createQuery("FROM " + beanClassName
+					+ " WHERE deletionFlag = ?0 AND purchaseEntryId.purchaseEntryId = ?1 AND returnFlag=false");
 			query.setParameter(0, 0);
 			query.setParameter(1, id);
 			listOfObjects = query.getResultList();
@@ -111,7 +112,8 @@ public class PurchaseEntryDaoImplementation implements PurchaseEntryDao {
 		Session session = getSession();
 		List<?> listOfObjects = null;
 		try {
-			Query<?> query = session.createQuery("FROM " + beanClassName + " WHERE deletionFlag=?0 AND id NOT IN(?1) AND returnFlag=false");
+			Query<?> query = session.createQuery(
+					"FROM " + beanClassName + " WHERE deletionFlag=?0 AND id NOT IN(?1) AND returnFlag=false");
 			query.setParameter(0, 0);
 			query.setParameter(1, id);
 			listOfObjects = query.getResultList();
@@ -143,7 +145,8 @@ public class PurchaseEntryDaoImplementation implements PurchaseEntryDao {
 	public boolean deletePurchaseEntryItemListByPurchaseEntryId(int purchaseEntryId) {
 		Session session = getSession();
 		try {
-			Query<?> query = session.createQuery("UPDATE PurchaseEntryItemBean SET deletionFlag=?0 WHERE purchaseEntryId.purchaseEntryId=?1");
+			Query<?> query = session.createQuery(
+					"UPDATE PurchaseEntryItemBean SET deletionFlag=?0 WHERE purchaseEntryId.purchaseEntryId=?1");
 			query.setParameter(0, 1);
 			query.setParameter(1, purchaseEntryId);
 			query.executeUpdate();
@@ -152,5 +155,24 @@ public class PurchaseEntryDaoImplementation implements PurchaseEntryDao {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	@Override
+	public List<?> getAllPurchaseEntryListBtwnDatesAndPayment(String beanClassName, String fromDate, String toDate,
+			String paymentMode) {
+		Session session = getSession();
+		List<?> listOfObjects = null;
+		try {
+			Query<?> query = session.createQuery("FROM " + beanClassName
+					+ " WHERE deletionFlag = ?0 AND returnFlag=false AND receivedDate BETWEEN ?1 AND ?2 AND paymentMode=?3");
+			query.setParameter(0, 0);
+			query.setParameter(1, fromDate);
+			query.setParameter(2, toDate);
+			query.setParameter(3, paymentMode);
+			listOfObjects = query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listOfObjects;
 	}
 }

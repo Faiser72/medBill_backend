@@ -25,4 +25,7 @@ public interface PurchaseEntryService {
 
 	boolean deletePurchaseEntryItemListByPurchaseEntryId(int purchaseEntryId);
 
+	List<?> getAllPurchaseEntryListBtwnDatesAndPayment(String beanClassName, String fromDate, String toDate,
+			String paymentMode);
+
 }

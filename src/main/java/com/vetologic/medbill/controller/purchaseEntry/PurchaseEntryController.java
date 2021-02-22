@@ -221,7 +221,7 @@ public class PurchaseEntryController {
 			purchaseEntryDetails.setDdDate(purchaseEntryBean.getDdDate());
 			purchaseEntryDetails.setDdNo(purchaseEntryBean.getDdNo());
 			purchaseEntryDetails.setPaymentMode(purchaseEntryBean.getPaymentMode());
-			
+
 //			purchaseEntryDetails.setReturnFlag(purchaseEntryBean.isReturnFlag());
 			purchaseEntryDetails.setUpdatedDate(AppUtil.currentDateWithTime());
 
@@ -351,8 +351,7 @@ public class PurchaseEntryController {
 		}
 		return medbillResponse;
 	}
-	
-	
+
 	@PutMapping(path = "/returnPurchaseEntryDetails", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public MedbillResponse returnPurchaseEntryDetails(@RequestBody PurchaseEntryBean purchaseEntryBean,
 			MedbillResponse MedbillResponse) {
@@ -464,6 +463,24 @@ public class PurchaseEntryController {
 			log.info("This PurchaseEntry Id: " + purchaseEntryBean.getPurchaseEntryId() + " is Not Exist");
 		}
 
+		return MedbillResponse;
+	}
+
+	@SuppressWarnings("unchecked")
+	@GetMapping(path = "/getAllPurchaseEntryListBtwnDatesAndPayment/{fromDate}/{toDate}/{paymentMode}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public MedbillResponse getAllPurchaseEntryListBtwnDatesAndPayment(@PathVariable("fromDate") String fromDate,
+			@PathVariable("toDate") String toDate, @PathVariable("paymentMode") String paymentMode,
+			MedbillResponse MedbillResponse) {
+		List<PurchaseEntryBean> allPurchaseEntryDetails = (List<PurchaseEntryBean>) purchaseEntryService
+				.getAllPurchaseEntryListBtwnDatesAndPayment("PurchaseEntryBean", fromDate, toDate, paymentMode);
+		if (allPurchaseEntryDetails.size() > 0) {
+			MedbillResponse.setListObject(allPurchaseEntryDetails);
+			MedbillResponse.setSuccess(true);
+		} else {
+			MedbillResponse.setSuccess(false);
+			MedbillResponse.setMessage("PurchaseEntry List is Empty");
+			log.info("PurchaseEntry List is Empty");
+		}
 		return MedbillResponse;
 	}
 }

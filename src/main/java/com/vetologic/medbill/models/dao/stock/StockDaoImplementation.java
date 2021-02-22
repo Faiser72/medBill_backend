@@ -158,8 +158,7 @@ public class StockDaoImplementation implements StockDao {
 	public boolean deleteStockItemByStockId(int stockId) {
 		Session session = getSession();
 		try {
-			Query<?> query = session.createQuery(
-					"UPDATE StockItemBean SET deletionFlag=?0 WHERE stockId.stockId=?1");
+			Query<?> query = session.createQuery("UPDATE StockItemBean SET deletionFlag=?0 WHERE stockId.stockId=?1");
 			query.setParameter(0, 1);
 			query.setParameter(1, stockId);
 			query.executeUpdate();
@@ -168,6 +167,22 @@ public class StockDaoImplementation implements StockDao {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	@Override
+	public List<?> getStockItemListByProductId(String beanClassName, int productId) {
+		Session session = getSession();
+		List<?> listOfObjects = null;
+		try {
+			Query<?> query = session.createQuery("FROM " + beanClassName
+					+ " WHERE deletionFlag = ?0 AND returnFlag=false AND productName.productId = ?1");
+			query.setParameter(0, 0);
+			query.setParameter(1, productId);
+			listOfObjects = query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listOfObjects;
 	}
 
 }

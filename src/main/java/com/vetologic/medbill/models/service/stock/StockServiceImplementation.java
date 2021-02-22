@@ -67,4 +67,9 @@ public class StockServiceImplementation implements StockService {
 	public boolean deleteStockItemByStockId(int stockId) {
 		return stockDao.deleteStockItemByStockId(stockId);
 	}
+
+	@Override
+	public List<?> getStockItemListByProductId(String beanClassName, int productId) {
+		return stockDao.getStockItemListByProductId(beanClassName, productId);
+	}
 }

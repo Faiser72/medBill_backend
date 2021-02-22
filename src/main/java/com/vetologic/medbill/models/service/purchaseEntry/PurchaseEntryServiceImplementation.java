@@ -62,4 +62,11 @@ public class PurchaseEntryServiceImplementation implements PurchaseEntryService 
 	public boolean deletePurchaseEntryItemListByPurchaseEntryId(int purchaseEntryId) {
 		return purchaseEntryDao.deletePurchaseEntryItemListByPurchaseEntryId(purchaseEntryId);
 	}
+
+	@Override
+	public List<?> getAllPurchaseEntryListBtwnDatesAndPayment(String beanClassName, String fromDate, String toDate,
+			String paymentMode) {
+		return purchaseEntryDao.getAllPurchaseEntryListBtwnDatesAndPayment(beanClassName, fromDate, toDate,
+				paymentMode);
+	}
 }
