@@ -63,4 +63,10 @@ public class StockBean extends AbstractCreatedAndUpdated {
 	@Column(name = "STOCK_RETURN_FLAG")
 	private boolean returnFlag;
 
+	@Column(name = "STOCK_REASON_FOR_RETURN")
+	private String reasonForReturn;
+
+	@Column(name = "STOCK_RETURN_DATE")
+	private String returnDate;
+
 }

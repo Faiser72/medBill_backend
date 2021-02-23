@@ -175,4 +175,31 @@ public class PurchaseEntryDaoImplementation implements PurchaseEntryDao {
 		}
 		return listOfObjects;
 	}
+
+	@Override
+	public List<?> getAllReturn(String beanClassName) {
+		Session session = getSession();
+		List<?> listOfObjects = null;
+		try {
+			Query<?> query = session.createQuery("FROM " + beanClassName + " WHERE returnFlag=true");
+			listOfObjects = query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listOfObjects;
+	}
+
+	@Override
+	public List<?> getAllPurchaseEntryItem(String beanClassName) {
+		Session session = getSession();
+		List<?> listOfObjects = null;
+		try {
+			Query<?> query = session.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND returnFlag=false ");
+			query.setParameter(0, 0);
+			listOfObjects = query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listOfObjects;
+	}
 }

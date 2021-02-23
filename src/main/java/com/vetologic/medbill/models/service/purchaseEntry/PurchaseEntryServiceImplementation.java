@@ -69,4 +69,14 @@ public class PurchaseEntryServiceImplementation implements PurchaseEntryService 
 		return purchaseEntryDao.getAllPurchaseEntryListBtwnDatesAndPayment(beanClassName, fromDate, toDate,
 				paymentMode);
 	}
+
+	@Override
+	public List<?> getAllReturn(String beanClassName) {
+		return purchaseEntryDao.getAllReturn(beanClassName);
+	}
+
+	@Override
+	public List<?> getAllPurchaseEntryItem(String beanClassName) {
+		return purchaseEntryDao.getAllPurchaseEntryItem(beanClassName);
+	}
 }

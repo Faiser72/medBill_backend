@@ -371,6 +371,8 @@ public class PurchaseEntryController {
 			purchaseEntryDetails.setSupplierInvoiceNumber(purchaseEntryBean.getSupplierInvoiceNumber());
 			purchaseEntryDetails.setReceivedDate(purchaseEntryBean.getReceivedDate());
 			purchaseEntryDetails.setReturnFlag(purchaseEntryBean.isReturnFlag());
+			purchaseEntryDetails.setReasonForReturn(purchaseEntryBean.getReasonForReturn());
+			purchaseEntryDetails.setReturnDate(AppUtil.currentDateWithTime());
 			purchaseEntryDetails.setUpdatedDate(AppUtil.currentDateWithTime());
 
 			System.out.println("purchaseEntryDetails.getPurchaseEntryId()" + purchaseEntryDetails.getPurchaseEntryId());
@@ -390,6 +392,7 @@ public class PurchaseEntryController {
 					purchaseEntryItemBean.setExpiryDate(purchase.getExpiryDate());
 					purchaseEntryItemBean.setAmount(purchase.getAmount());
 					purchaseEntryItemBean.setReturnFlag(purchase.isReturnFlag());
+					purchaseEntryItemBean.setReturnDate(AppUtil.currentDateWithTime());
 					purchaseEntryItemBean.setUpdatedDate(AppUtil.currentDateWithTime());
 					if (purchaseEntryService.update(purchaseEntryItemBean)) {
 						StockItemBean stocks = new StockItemBean();
@@ -423,7 +426,9 @@ public class PurchaseEntryController {
 				// stockDetails.setStockList(purchaseEntryBean.getStockList());
 				stockDetails.setSupplierInvoiceNumber(purchaseEntryBean.getSupplierInvoiceNumber());
 				stockDetails.setReceivedDate(purchaseEntryBean.getReceivedDate());
-//				stockDetails.setReturnFlag(purchaseEntryBean.isReturnFlag());
+				stockDetails.setReturnFlag(purchaseEntryBean.isReturnFlag());
+				stockDetails.setReasonForReturn(purchaseEntryBean.getReasonForReturn());
+				stockDetails.setReturnDate(AppUtil.currentDateWithTime());
 				stockDetails.setUpdatedDate(AppUtil.currentDateWithTime());
 
 				if (stockService.update(stockDetails)) {
@@ -441,6 +446,7 @@ public class PurchaseEntryController {
 						stockItemBean.setAmount(stock.getAmount());
 						stockItemBean.setUpdatedDate(AppUtil.currentDateWithTime());
 						stockItemBean.setReturnFlag(stock.isReturnFlag());
+						stockItemBean.setReturnDate(AppUtil.currentDateWithTime());
 						stockService.update(stockItemBean);
 					}
 				}
@@ -482,5 +488,37 @@ public class PurchaseEntryController {
 			log.info("PurchaseEntry List is Empty");
 		}
 		return MedbillResponse;
+	}
+
+	@SuppressWarnings("unchecked")
+	@GetMapping(path = "/listAllReturnPurchaseEntry", produces = MediaType.APPLICATION_JSON_VALUE)
+	public MedbillResponse listAllReturnPurchaseEntry(MedbillResponse medbillResponse) {
+		List<PurchaseEntryItemBean> purchaseList = (List<PurchaseEntryItemBean>) purchaseEntryService
+				.getAllReturn("PurchaseEntryItemBean");
+		if (purchaseList.size() > 0) {
+			medbillResponse.setListObject(purchaseList);
+			medbillResponse.setSuccess(true);
+		} else {
+			medbillResponse.setSuccess(false);
+			medbillResponse.setMessage("purchaseList  is Empty");
+			log.info("purchaseList  is Empty");
+		}
+		return medbillResponse;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@GetMapping(path = "/listAllPurchaseEntryItem", produces = MediaType.APPLICATION_JSON_VALUE)
+	public MedbillResponse listAllPurchaseEntryItem(MedbillResponse medbillResponse) {
+		List<PurchaseEntryItemBean> purchaseList = (List<PurchaseEntryItemBean>) purchaseEntryService
+				.getAllPurchaseEntryItem("PurchaseEntryItemBean");
+		if (purchaseList.size() > 0) {
+			medbillResponse.setListObject(purchaseList);
+			medbillResponse.setSuccess(true);
+		} else {
+			medbillResponse.setSuccess(false);
+			medbillResponse.setMessage("purchaseList  is Empty");
+			log.info("purchaseList  is Empty");
+		}
+		return medbillResponse;
 	}
 }

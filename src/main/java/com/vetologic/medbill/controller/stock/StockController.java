@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vetologic.medbill.beans.purchaseEntry.PurchaseEntryBean;
 import com.vetologic.medbill.beans.response.MedbillResponse;
 import com.vetologic.medbill.beans.stock.StockBean;
 import com.vetologic.medbill.beans.stock.StockItemBean;
@@ -120,5 +121,22 @@ public class StockController {
 			log.info("StockItem is Empty");
 		}
 		return medbillResponse;
+	}
+
+	@SuppressWarnings("unchecked")
+	@GetMapping(path = "/getAllNearByExpiryProducts/{fromDate}/{toDate}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public MedbillResponse getAllNearByExpiryProducts(@PathVariable("fromDate") String fromDate,
+			@PathVariable("toDate") String toDate, MedbillResponse MedbillResponse) {
+		List<StockItemBean> allStockDetails = (List<StockItemBean>) stockService
+				.getAllPurchaseEntryListBtwnDatesAndPayment("StockItemBean", fromDate, toDate);
+		if (allStockDetails.size() > 0) {
+			MedbillResponse.setListObject(allStockDetails);
+			MedbillResponse.setSuccess(true);
+		} else {
+			MedbillResponse.setSuccess(false);
+			MedbillResponse.setMessage("StockItem List is Empty");
+			log.info("StockItem List is Empty");
+		}
+		return MedbillResponse;
 	}
 }

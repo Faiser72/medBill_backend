@@ -29,4 +29,6 @@ public interface StockDao {
 
 	List<?> getStockItemListByProductId(String beanClassName, int productId);
 
+	List<?> getAllPurchaseEntryListBtwnDatesAndPayment(String beanClassName, String fromDate, String toDate);
+
 }

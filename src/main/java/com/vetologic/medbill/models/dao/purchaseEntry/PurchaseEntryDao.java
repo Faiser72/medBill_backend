@@ -28,4 +28,8 @@ public interface PurchaseEntryDao {
 	List<?> getAllPurchaseEntryListBtwnDatesAndPayment(String beanClassName, String fromDate, String toDate,
 			String paymentMode);
 
+	List<?> getAllReturn(String beanClassName);
+
+	List<?> getAllPurchaseEntryItem(String beanClassName);
+
 }

@@ -74,4 +74,7 @@ public class StockItemBean extends AbstractCreatedAndUpdated {
 	@Column(name = "STOCK_ITM_RETURN_FLAG")
 	private boolean returnFlag;
 
+	@Column(name = "STOCK_ITM_RETURN_DATE")
+	private String returnDate;
+
 }

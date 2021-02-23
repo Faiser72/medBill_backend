@@ -95,4 +95,10 @@ public class PurchaseEntryBean extends AbstractCreatedAndUpdated {
 	@Column(name = "PUR_DD_BRANCH")
 	private String ddBranch;
 
+	@Column(name = "PUR_REASON_FOR_RETURN")
+	private String reasonForReturn;
+	
+	@Column(name = "PUR_RETURN_DATE")
+	private String returnDate;
+
 }

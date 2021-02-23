@@ -185,4 +185,21 @@ public class StockDaoImplementation implements StockDao {
 		return listOfObjects;
 	}
 
+	@Override
+	public List<?> getAllPurchaseEntryListBtwnDatesAndPayment(String beanClassName, String fromDate, String toDate) {
+		Session session = getSession();
+		List<?> listOfObjects = null;
+		try {
+			Query<?> query = session.createQuery("FROM " + beanClassName
+					+ " WHERE deletionFlag = ?0 AND returnFlag=false AND expiryDate BETWEEN ?1 AND ?2");
+			query.setParameter(0, 0);
+			query.setParameter(1, fromDate);
+			query.setParameter(2, toDate);
+			listOfObjects = query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listOfObjects;
+	}
+
 }
