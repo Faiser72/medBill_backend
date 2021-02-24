@@ -202,4 +202,20 @@ public class StockDaoImplementation implements StockDao {
 		return listOfObjects;
 	}
 
+	@Override
+	public Object getByStockItemId(String beanClassName, int stockItemId) {
+		Session session = getSession();
+		Object object = null;
+		try {
+			Query<?> query = session
+					.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND stockItemId = ?1");
+			query.setParameter(0, 0);
+			query.setParameter(1, stockItemId);
+			object = query.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return object;
+	}
+
 }

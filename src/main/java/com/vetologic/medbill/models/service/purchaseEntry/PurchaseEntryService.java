@@ -32,4 +32,6 @@ public interface PurchaseEntryService {
 
 	List<?> getAllPurchaseEntryItem(String beanClassName);
 
+	Object getByBatchNumber(String string, String batchNumber);
+
 }

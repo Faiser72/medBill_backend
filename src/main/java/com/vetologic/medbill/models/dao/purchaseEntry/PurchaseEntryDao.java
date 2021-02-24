@@ -32,4 +32,6 @@ public interface PurchaseEntryDao {
 
 	List<?> getAllPurchaseEntryItem(String beanClassName);
 
+	Object getByBatchNumber(String beanClassName, String batchNumber);
+
 }

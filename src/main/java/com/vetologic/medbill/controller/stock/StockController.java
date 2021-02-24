@@ -9,14 +9,17 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vetologic.medbill.beans.purchaseEntry.PurchaseEntryBean;
+import com.vetologic.medbill.beans.purchaseEntry.PurchaseEntryItemBean;
 import com.vetologic.medbill.beans.response.MedbillResponse;
 import com.vetologic.medbill.beans.stock.StockBean;
 import com.vetologic.medbill.beans.stock.StockItemBean;
 import com.vetologic.medbill.controller.productCategoryMaster.ProductCategoryMasterController;
+import com.vetologic.medbill.models.service.purchaseEntry.PurchaseEntryService;
 import com.vetologic.medbill.models.service.stock.StockService;
 
 @RestController
@@ -28,6 +31,9 @@ public class StockController {
 
 	@Autowired
 	private StockService stockService;
+
+	@Autowired
+	private PurchaseEntryService purchaseEntryService;
 
 	@SuppressWarnings("unchecked")
 	@GetMapping(path = "/listStock", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -138,5 +144,41 @@ public class StockController {
 			log.info("StockItem List is Empty");
 		}
 		return MedbillResponse;
+	}
+
+	@PutMapping(path = "/returnNearByexpiryStock", produces = MediaType.APPLICATION_JSON_VALUE)
+	public MedbillResponse returnNearByexpiryStock(@RequestParam("stockItemId") int stockItemId,
+			MedbillResponse medbillResponse) {
+		StockItemBean purchaseEntry = (StockItemBean) stockService.getByStockItemId("StockItemBean", stockItemId);
+		if (purchaseEntry != null) {
+			System.err.println("deleteeeeeee" + purchaseEntry);
+			purchaseEntry.setReturnFlag(true);
+			if (stockService.update(purchaseEntry)) {
+				PurchaseEntryItemBean purchaseItemDetails = (PurchaseEntryItemBean) purchaseEntryService
+						.getByBatchNumber("PurchaseEntryItemBean", purchaseEntry.getBatchNumber());
+
+				if (purchaseItemDetails != null) {
+					purchaseItemDetails.setReturnFlag(true);
+					if (purchaseEntryService.update(purchaseItemDetails)) {
+						medbillResponse.setSuccess(true);
+						medbillResponse.setMessage("Return Successfully");
+						log.info("This PurchaseEntry Id: " + stockItemId + " Return Successfully");
+					}
+				}
+
+				medbillResponse.setSuccess(true);
+				medbillResponse.setMessage("Deleted Successfully");
+				log.info("This PurchaseEntry Id: " + stockItemId + " Return Successfully");
+			} else {
+				medbillResponse.setSuccess(false);
+				medbillResponse.setMessage("Deletion Failed");
+				log.info("Deletion Failed");
+			}
+		} else {
+			medbillResponse.setSuccess(false);
+			medbillResponse.setMessage("This PurchaseEntry Not Exist");
+			log.info("This PurchaseEntry Id: " + stockItemId + " is Not Exist");
+		}
+		return medbillResponse;
 	}
 }

@@ -505,7 +505,7 @@ public class PurchaseEntryController {
 		}
 		return medbillResponse;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@GetMapping(path = "/listAllPurchaseEntryItem", produces = MediaType.APPLICATION_JSON_VALUE)
 	public MedbillResponse listAllPurchaseEntryItem(MedbillResponse medbillResponse) {

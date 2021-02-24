@@ -79,4 +79,9 @@ public class PurchaseEntryServiceImplementation implements PurchaseEntryService 
 	public List<?> getAllPurchaseEntryItem(String beanClassName) {
 		return purchaseEntryDao.getAllPurchaseEntryItem(beanClassName);
 	}
+
+	@Override
+	public Object getByBatchNumber(String beanClassName, String batchNumber) {
+		return purchaseEntryDao.getByBatchNumber(beanClassName, batchNumber);
+	}
 }

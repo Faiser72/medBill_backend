@@ -77,4 +77,9 @@ public class StockServiceImplementation implements StockService {
 	public List<?> getAllPurchaseEntryListBtwnDatesAndPayment(String beanClassName, String fromDate, String toDate) {
 		return stockDao.getAllPurchaseEntryListBtwnDatesAndPayment(beanClassName, fromDate, toDate);
 	}
+
+	@Override
+	public Object getByStockItemId(String beanClassName, int stockItemId) {
+		return stockDao.getByStockItemId(beanClassName, stockItemId);
+	}
 }

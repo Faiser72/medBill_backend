@@ -194,12 +194,29 @@ public class PurchaseEntryDaoImplementation implements PurchaseEntryDao {
 		Session session = getSession();
 		List<?> listOfObjects = null;
 		try {
-			Query<?> query = session.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND returnFlag=false ");
+			Query<?> query = session
+					.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND returnFlag=false ");
 			query.setParameter(0, 0);
 			listOfObjects = query.getResultList();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return listOfObjects;
+	}
+
+	@Override
+	public Object getByBatchNumber(String beanClassName, String batchNumber) {
+		Session session = getSession();
+		Object object = null;
+		try {
+			Query<?> query = session.createQuery(
+					"FROM " + beanClassName + " WHERE deletionFlag = ?0 AND batchNumber = ?1 AND returnFlag=false");
+			query.setParameter(0, 0);
+			query.setParameter(1, batchNumber);
+			object = query.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return object;
 	}
 }
