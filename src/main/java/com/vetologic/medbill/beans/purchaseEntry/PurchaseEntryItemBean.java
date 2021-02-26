@@ -38,7 +38,7 @@ public class PurchaseEntryItemBean extends AbstractCreatedAndUpdated {
 	private String packaging;
 
 	@Column(name = "PUR_ITM_PROD_QUANTITY")
-	private String quantity;
+	private int quantity;
 
 	@Column(name = "PUR_ITM_PROD_UNIT_PRICE")
 	private String unitPrice;

@@ -39,7 +39,7 @@ public class StockItemBean extends AbstractCreatedAndUpdated {
 	private String packaging;
 
 	@Column(name = "STOCK_ITM_PROD_QUANTITY")
-	private String quantity;
+	private int quantity;
 
 	@Column(name = "STOCK_ITM_PROD_UNIT_PRICE")
 	private String unitPrice;
@@ -76,5 +76,11 @@ public class StockItemBean extends AbstractCreatedAndUpdated {
 
 	@Column(name = "STOCK_ITM_RETURN_DATE")
 	private String returnDate;
+	
+	@Column(name = "STOCK_ITM_PROD_BALANCE_QUANTITY")
+	private int balanceQuantity;
+	
+	@Column(name = "STOCK_ITM_PROD_SOLD_QUANTITY")
+	private int soldQuantity;
 
 }

@@ -72,6 +72,7 @@ public class PurchaseEntryController {
 						stocks.setProductType(purchaseItems.getProductType());
 						stocks.setQuantity(purchaseItems.getQuantity());
 						stocks.setUnitPrice(purchaseItems.getUnitPrice());
+						stocks.setBalanceQuantity(purchaseItems.getQuantity());
 						stockList.add(stocks);
 					}
 				}
@@ -95,6 +96,7 @@ public class PurchaseEntryController {
 					for (StockItemBean stockItems : stockList) {
 						stockItems.setCreatedDate(AppUtil.currentDateWithTime());
 						stockItems.setStockId(stockBean);
+//						stockItems.setBalanceQuantity(stockItems.getQuantity());
 						stockItems.setDeletionFlag(0);
 						stockItems.setReturnFlag(false);
 						purchaseEntryService.save(stockItems);
@@ -285,6 +287,7 @@ public class PurchaseEntryController {
 								stockDetails.getStockId(), stock.getPurcItemBean().getPurchaseEntryItemId());
 						stockItemBean.setPackaging(stock.getPackaging());
 						stockItemBean.setQuantity(stock.getQuantity());
+						stockItemBean.setBalanceQuantity(stock.getQuantity());
 						stockItemBean.setUnitPrice(stock.getUnitPrice());
 						stockItemBean.setBatchNumber(stock.getBatchNumber());
 						stockItemBean.setManufactureDate(stock.getManufactureDate());

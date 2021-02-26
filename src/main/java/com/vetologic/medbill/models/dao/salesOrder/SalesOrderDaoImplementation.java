@@ -1,55 +1,22 @@
-package com.vetologic.medbill.models.dao.order;
-
-import java.io.Serializable;
-import java.util.List;
+package com.vetologic.medbill.models.dao.salesOrder;
 
 import javax.persistence.EntityManager;
-
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.vetologic.medbill.beans.order.OrderItemBean;
+import java.io.Serializable;
+import java.util.List;
 
 @Repository
-public class OrderDaoImplementation implements OrderDao {
+public class SalesOrderDaoImplementation implements SalesOrderDao {
 
 	@Autowired
 	private EntityManager entityManager;
 
 	private Session getSession() {
 		return entityManager.unwrap(Session.class);
-	}
-
-	@Override
-	public List<?> getAllProductCategoryId(String beanClassName, int id) {
-		Session session = getSession();
-		List<?> listOfObjects = null;
-		try {
-			Query<?> query = session.createQuery(
-					"FROM " + beanClassName + " WHERE deletionFlag = ?0 and productCategory.categoryId = ?1");
-			query.setParameter(0, 0);
-			query.setParameter(1, id);
-			listOfObjects = query.getResultList();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return listOfObjects;
-	}
-
-	@Override
-	public String getOrderMaxId() {
-		String ticketId = null;
-		Session session = getSession();
-		try {
-			Query<String> query = session.createQuery("SELECT MAX(orderNumber) FROM OrderBean", String.class);
-			ticketId = query.uniqueResult();
-			return ticketId;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return ticketId;
 	}
 
 	@Override
@@ -69,7 +36,8 @@ public class OrderDaoImplementation implements OrderDao {
 		Session session = getSession();
 		List<?> listOfObjects = null;
 		try {
-			Query<?> query = session.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND cancellationFlag = ?1");
+			Query<?> query = session
+					.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND cancellationFlag = ?1");
 			query.setParameter(0, 0);
 			query.setParameter(1, 0);
 			listOfObjects = query.getResultList();
@@ -80,27 +48,12 @@ public class OrderDaoImplementation implements OrderDao {
 	}
 
 	@Override
-	public List<?> getOrderListByOederId(String beanClassName, int id) {
-		Session session = getSession();
-		List<?> listOfObjects = null;
-		try {
-			Query<?> query = session
-					.createQuery("FROM " + beanClassName + " WHERE deletionFlag =?0 AND orderId.orderId =?1");
-			query.setParameter(0, 0);
-			query.setParameter(1, id);
-			listOfObjects = query.getResultList();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return listOfObjects;
-	}
-	
-	@Override
 	public Object getById(String beanClassName, int id) {
 		Session session = getSession();
 		Object object = null;
 		try {
-			Query<?> query = session.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND orderId = ?1");
+			Query<?> query = session
+					.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND salesOrderId = ?1");
 			query.setParameter(0, 0);
 			query.setParameter(1, id);
 			object = query.uniqueResult();
@@ -109,7 +62,7 @@ public class OrderDaoImplementation implements OrderDao {
 		}
 		return object;
 	}
-	
+
 	@Override
 	public boolean update(Object object) {
 		Session session = getSession();
@@ -123,7 +76,69 @@ public class OrderDaoImplementation implements OrderDao {
 	}
 
 	@Override
-	public List<?> getAllOrdersDeleted(String beanClassName) {
+	public String getSalesInvoiceNumber() {
+		String ticketId = null;
+		Session session = getSession();
+		try {
+			Query<String> query = session.createQuery("SELECT MAX(invoiceNumber) FROM SalesOrderBean", String.class);
+			ticketId = query.uniqueResult();
+			return ticketId;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ticketId;
+	}
+
+	@Override
+	public List<?> getAllProductCategoryId(String beanClassName, int id) {
+		Session session = getSession();
+		List<?> listOfObjects = null;
+		try {
+			Query<?> query = session
+					.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND productType.categoryId = ?1");
+			query.setParameter(0, 0);
+			query.setParameter(1, id);
+			listOfObjects = query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listOfObjects;
+	}
+
+	@Override
+	public List<?> getAllSalesOrderListById(String beanClassName, int id) {
+		Session session = getSession();
+		List<?> listOfObjects = null;
+		try {
+			Query<?> query = session
+					.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND salesId.salesOrderId = ?1");
+			query.setParameter(0, 0);
+			query.setParameter(1, id);
+			listOfObjects = query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listOfObjects;
+	}
+
+	@Override
+	public Object getStockDeatailById(String beanClassName, int id) {
+		Session session = getSession();
+		Object object = null;
+		try {
+			Query<?> query = session
+					.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND stockItemId = ?1");
+			query.setParameter(0, 0);
+			query.setParameter(1, id);
+			object = query.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return object;
+	}
+
+	@Override
+	public List<?> getAllSalesOrdersDeleted(String beanClassName) {
 		Session session = getSession();
 		List<?> listOfObjects = null;
 		try {
@@ -137,11 +152,12 @@ public class OrderDaoImplementation implements OrderDao {
 	}
 
 	@Override
-	public Object getDetedById(String beanClassName, int id) {
+	public Object getDeletedById(String beanClassName, int id) {
 		Session session = getSession();
 		Object object = null;
 		try {
-			Query<?> query = session.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND orderId = ?1");
+			Query<?> query = session
+					.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND salesOrderId = ?1");
 			query.setParameter(0, 1);
 			query.setParameter(1, id);
 			object = query.uniqueResult();
@@ -152,7 +168,7 @@ public class OrderDaoImplementation implements OrderDao {
 	}
 
 	@Override
-	public List<?> getAllOrdersCanceled(String beanClassName) {
+	public List<?> getAllSalesOrdersCanceled(String beanClassName) {
 		Session session = getSession();
 		List<?> listOfObjects = null;
 		try {
@@ -170,7 +186,8 @@ public class OrderDaoImplementation implements OrderDao {
 		Session session = getSession();
 		Object object = null;
 		try {
-			Query<?> query = session.createQuery("FROM " + beanClassName + " WHERE cancellationFlag = ?0 AND orderId = ?1");
+			Query<?> query = session
+					.createQuery("FROM " + beanClassName + " WHERE cancellationFlag = ?0 AND salesOrderId = ?1");
 			query.setParameter(0, 1);
 			query.setParameter(1, id);
 			object = query.uniqueResult();
@@ -181,14 +198,33 @@ public class OrderDaoImplementation implements OrderDao {
 	}
 
 	@Override
-	public List<?> getOrderByOrderId(String beanClassName, int id) {
+	public Object getSalesOrderItemBeanById(String string, int salesItemId) {
+		Session session = getSession();
+		Object object = null;
+		try {
+			Query<?> query = session.createQuery("FROM " + string + " WHERE deletionFlag = ?0 AND salesItemId = ?1");
+			query.setParameter(0, 0);
+			query.setParameter(1, salesItemId);
+			object = query.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return object;
+	}
+
+	@Override
+	public List<?> getAllSalesListBtwnDatesAndPayment(String beanClassName, String fromDate, String toDate,
+			String paymentMode) {
 		Session session = getSession();
 		List<?> listOfObjects = null;
 		try {
-			Query<?> query = session
-					.createQuery("FROM " + beanClassName + " WHERE deletionFlag = ?0 AND orderId = ?1");
+			Query<?> query = session.createQuery("FROM " + beanClassName
+					+ " WHERE deletionFlag = ?0 AND cancellationFlag=?4 AND salesDate BETWEEN ?1 AND ?2 AND paymentMode=?3");
 			query.setParameter(0, 0);
-			query.setParameter(1, id);
+			query.setParameter(1, fromDate);
+			query.setParameter(2, toDate);
+			query.setParameter(3, paymentMode);
+			query.setParameter(4, 0);
 			listOfObjects = query.getResultList();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -196,36 +232,4 @@ public class OrderDaoImplementation implements OrderDao {
 		return listOfObjects;
 	}
 
-	@Override
-	public OrderItemBean getOrderItemBeanById(String string, int orderItemId) {
-		Session session = getSession();
-		OrderItemBean object = null;
-		try {
-			Query<OrderItemBean> query = session.createQuery("FROM " + string + " WHERE deletionFlag = ?0 AND orderItemId = ?1" ,OrderItemBean.class);
-			query.setParameter(0, 0);
-			query.setParameter(1, orderItemId);
-			object = query.uniqueResult();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return object;
-	}
-	
-	@Override
-	public List<?> getAllOrderListBtwnDates(String beanClassName, String fromDate, String toDate) {
-		Session session = getSession();
-		List<?> listOfObjects = null;
-		try {
-			Query<?> query = session.createQuery("FROM " + beanClassName
-					+ " WHERE deletionFlag = ?0  AND orderDate BETWEEN ?1 AND ?2 AND cancellationFlag = ?3");
-			query.setParameter(0, 0);
-			query.setParameter(1, fromDate);
-			query.setParameter(2, toDate);
-			query.setParameter(3, 0);
-			listOfObjects = query.getResultList();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return listOfObjects;
-	}
 }

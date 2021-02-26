@@ -46,4 +46,7 @@ public class OrderBean extends AbstractCreatedAndUpdated {
 	
 	@Transient
 	List<OrderItemBean> orderItemList;
+	
+	@Column(name = "ORD_CANCELLATION_FLAG")
+	private int cancellationFlag;
 }
