@@ -21,17 +21,19 @@ public interface SalesOrderDao {
 	List<?> getAllSalesOrderListById(String beanClassName, int id);
 
 	Object getStockDeatailById(String beanClassName, int id);
-	
+
 	List<?> getAllSalesOrdersDeleted(String beanClassName);
-	
+
 	Object getDeletedById(String beanClassName, int id);
-	
+
 	List<?> getAllSalesOrdersCanceled(String beanClassName);
 
 	Object getCanceledById(String beanClassName, int id);
-	
+
 	Object getSalesOrderItemBeanById(String string, int salesItemId);
-	
+
 	List<?> getAllSalesListBtwnDatesAndPayment(String beanClassName, String fromDate, String toDate,
 			String paymentMode);
+
+	List<?> getAllSalesListOfProductBtwnDates(String beanClassName, String fromDate, String toDate, String productName);
 }

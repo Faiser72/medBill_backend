@@ -31,21 +31,21 @@ public class SalesOrderListBean extends AbstractCreatedAndUpdated {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "SALES_ITM_ID")
 	private int salesItemId;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "SALES_ID")
 	private SalesOrderBean salesId;
-	
+
 	@Column(name = "SALES_ITM_DELETION_FLAG")
 	private int deletionFlag;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "STOCK_ITEM_ID")
 	private StockItemBean stockItemId;
-	
+
 	@Column(name = "SALES_ITM_QUANTITY")
 	private int quantity;
-	
+
 	@Column(name = "SALES_ITM_TOTAL_AMT")
 	private String amount;
 }

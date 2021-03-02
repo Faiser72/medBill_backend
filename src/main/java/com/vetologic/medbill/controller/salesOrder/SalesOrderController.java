@@ -332,4 +332,22 @@ public class SalesOrderController {
 		}
 		return MedbillResponse;
 	}
+
+	@SuppressWarnings("unchecked")
+	@GetMapping(path = "/getAllSalesListOfProductBtwnDates/{fromDate}/{toDate}/{productName}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public MedbillResponse getAllSalesListOfProductBtwnDates(@PathVariable("fromDate") String fromDate,
+			@PathVariable("toDate") String toDate, @PathVariable("productName") String productName,
+			MedbillResponse MedbillResponse) {
+		List<SalesOrderListBean> allSalesOrderBeanDetails = (List<SalesOrderListBean>) SalesOrderService
+				.getAllSalesListOfProductBtwnDates("SalesOrderListBean", fromDate, toDate, productName);
+		if (allSalesOrderBeanDetails.size() > 0) {
+			MedbillResponse.setListObject(allSalesOrderBeanDetails);
+			MedbillResponse.setSuccess(true);
+		} else {
+			MedbillResponse.setSuccess(false);
+			MedbillResponse.setMessage("SalesOrderListBean List is Empty");
+			log.info("SalesOrderListBean List is Empty");
+		}
+		return MedbillResponse;
+	}
 }

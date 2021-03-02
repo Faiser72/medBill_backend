@@ -232,4 +232,24 @@ public class SalesOrderDaoImplementation implements SalesOrderDao {
 		return listOfObjects;
 	}
 
+	@Override
+	public List<?> getAllSalesListOfProductBtwnDates(String beanClassName, String fromDate, String toDate,
+			String productName) {
+		System.err.println(beanClassName + fromDate + toDate + productName);
+		Session session = getSession();
+		List<?> listOfObjects = null;
+		try {
+			Query<?> query = session.createQuery("FROM " + beanClassName
+					+ " WHERE deletionFlag = ?0  AND salesId.salesDate BETWEEN ?1 AND ?2 AND stockItemId.productName.productName=?3");
+			query.setParameter(0, 0);
+			query.setParameter(1, fromDate);
+			query.setParameter(2, toDate);
+			query.setParameter(3, productName);
+			listOfObjects = query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listOfObjects;
+	}
+
 }

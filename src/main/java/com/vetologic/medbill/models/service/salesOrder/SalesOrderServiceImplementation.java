@@ -44,12 +44,12 @@ public class SalesOrderServiceImplementation implements SalesOrderService {
 
 	@Override
 	public List<?> getAllProductCategoryId(String beanClassName, int id) {
-		return salesOrderDao.getAllProductCategoryId(beanClassName,id);
+		return salesOrderDao.getAllProductCategoryId(beanClassName, id);
 	}
 
 	@Override
 	public List<?> getAllSalesOrderListById(String beanClassName, int id) {
-		return salesOrderDao.getAllSalesOrderListById(beanClassName,id);
+		return salesOrderDao.getAllSalesOrderListById(beanClassName, id);
 	}
 
 	@Override
@@ -74,17 +74,23 @@ public class SalesOrderServiceImplementation implements SalesOrderService {
 
 	@Override
 	public Object getCanceledById(String beanClassName, int id) {
-		return salesOrderDao.getCanceledById(beanClassName,id);
+		return salesOrderDao.getCanceledById(beanClassName, id);
 	}
 
 	@Override
 	public Object getSalesOrderItemBeanById(String string, int salesItemId) {
-		return salesOrderDao.getSalesOrderItemBeanById(string,salesItemId);
+		return salesOrderDao.getSalesOrderItemBeanById(string, salesItemId);
 	}
 
 	@Override
 	public List<?> getAllSalesListBtwnDatesAndPayment(String beanClassName, String fromDate, String toDate,
 			String paymentMode) {
-		return salesOrderDao.getAllSalesListBtwnDatesAndPayment(beanClassName,fromDate,toDate,paymentMode);
+		return salesOrderDao.getAllSalesListBtwnDatesAndPayment(beanClassName, fromDate, toDate, paymentMode);
+	}
+
+	@Override
+	public List<?> getAllSalesListOfProductBtwnDates(String beanClassName, String fromDate, String toDate,
+			String productName) {
+		return salesOrderDao.getAllSalesListOfProductBtwnDates(beanClassName, fromDate, toDate, productName);
 	}
 }
